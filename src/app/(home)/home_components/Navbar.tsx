@@ -21,6 +21,7 @@ const Navbar = () => {
     loginModal.onOpen();
   }, [loginModal]);
 
+  // nimadir qilish kerak
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = window.localStorage.getItem("access_token");
@@ -29,7 +30,7 @@ const Navbar = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localStorage.getItem("access_token")]);
+  }, []);
 
   return (
     <>
