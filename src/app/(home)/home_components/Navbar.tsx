@@ -12,7 +12,6 @@ const Navbar = () => {
   const [isAuth, setIsAuth] = useState(false);
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const [localStorageToken, setLocalStorageToken] = useState(localStorage.getItem("access_token"));
 
   const onOpenRegisterModal = useCallback(() => {
     registerModal.onOpen();
@@ -22,38 +21,15 @@ const Navbar = () => {
     loginModal.onOpen();
   }, [loginModal]);
 
-
-
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      setIsAuth(true);
-    } else {
-      setIsAuth(false);
+    if (typeof window !== "undefined") {
+      const token = window.localStorage.getItem("access_token");
+      if (token) {
+        setIsAuth(true);
+      }
     }
-  }, [localStorageToken]);
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setLocalStorageToken(localStorage.getItem("access_token"));
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   if(typeof window !== "undefined"){
-  //     const token = window.localStorage.getItem("access_token");
-  //     if (token) {
-  //       setIsAuth(true);
-  //     }
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [localStorage.getItem("access_token")]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localStorage.getItem("access_token")]);
 
   return (
     <>
