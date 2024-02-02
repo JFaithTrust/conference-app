@@ -1,18 +1,46 @@
-import React from 'react'
+"use client";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
 import { FC } from "react";
 
+import { Autoplay } from "swiper/modules";
+
 interface Item {
-  image: string
+  image: string;
 }
 
-interface Props {
-  items: Item[]
+interface IProps {
+  items: Item[];
 }
 
-const Partners: FC<Props> = ({items}) => {
+const Partners: FC<IProps> = ({ items }) => {
   return (
-    <div>Partners</div>
-  )
-}
+    <>
+      <Swiper
+        slidesPerView={3}
+        spaceBetween={30}
+        pagination={{
+          clickable: true,
+        }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        modules={[Autoplay]}
+        className="mySwiper"
+      >
+        {items.map((item, index) => (
+          <SwiperSlide key={index}>
+            <div className="flex items-center justify-center relative w-[280px] h-[79px]">
+              <img src={item.image} alt="" className="" />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
+  );
+};
 
-export default Partners
+export default Partners;

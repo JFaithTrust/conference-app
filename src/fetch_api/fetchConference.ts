@@ -13,6 +13,6 @@ export const getConferenceById = async (id: number): Promise<ConferenceType> => 
 }
 
 export const getAllConferences = async (): Promise<ConferenceType[]> => {
-  const { data } = await axios.get(`/api/conference/all`);
+  const { data } = await axios.get("/api/conference/all");
   return data;
 }
