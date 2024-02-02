@@ -14,7 +14,6 @@ export default function Home() {
       setCard(res.slice(0, 8));
     };
     getConferences()
-    localStorage.setItem("access_token", "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Iis5OTgxMTExMTExMTEiLCJyb2xlIjoiU1VQRVJfQURNSU4iLCJpYXQiOjE3MDY4NjQ0NzksImV4cCI6MTcwNjk1MDg3OX0.NS2whNZcOOHqeTcWbsqVrjw2mg2Ba5soYZZ5oTo3HFw");
   }, []);
 
   return (
