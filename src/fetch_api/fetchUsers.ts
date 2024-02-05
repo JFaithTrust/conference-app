@@ -20,6 +20,15 @@ export const getUserById = async (id: number): Promise<UserType[]> => {
   return data;
 };
 
+export const getUserByDirectionId = async (id: number): Promise<UserType[]> => {
+  const { data } = await axios.get(`/api/user/byDirection/${id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  return data;
+}
+
 export const putAllUsers = async (users: UserType[]) => {
   const { data } = await axios.put(`/api/user/make/reviewer`, users, {
     headers: {

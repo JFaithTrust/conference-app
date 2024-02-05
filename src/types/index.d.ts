@@ -10,11 +10,11 @@ export interface ConferenceType{
   startsAt: string;
   endsAt: string;
   deadlineForThesis: string;
-  cost: string;
-  description: string;
-  address: string;
-  requirements: string;
-  owner: {
+  cost?: string;
+  description?: string;
+  address?: string;
+  requirements?: string;
+  owner?: {
     id: number;
     fullName: string;
     email: string;

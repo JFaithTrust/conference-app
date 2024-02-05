@@ -5,7 +5,7 @@ import useRegisterModal from "@/hooks/useRegisterModal";
 import { createPostSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import React, { SyntheticEvent, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {

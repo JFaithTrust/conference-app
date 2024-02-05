@@ -11,3 +11,12 @@ export const getDirectionByConferenceId = async (id: number): Promise<DirectionT
     });
     return data;
 }
+
+export const getAllDirections = async (): Promise<DirectionType[]> => {
+    const { data } = await axios.get(`/api/direction/all`,{
+        headers: {
+        Authorization: `Bearer ${access_token}`,
+        },
+    });
+    return data;
+}

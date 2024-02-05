@@ -32,6 +32,14 @@ const Navbar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("access_token");
+      setIsAuth(false);
+    }
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="flex flex-row items-center justify-center py-0 px-5 my-[20px] w-full">
@@ -89,19 +97,28 @@ const Navbar = () => {
               </div>
             </div>
             {isAuth ? (
-              <div className="flex flex-row items-center justify-center gap-3 text-mainindigo py-[5px] px-[10px] rounded-md border-[2px] border-solid border-mainindigo">
-                <div className="flex flex-col text-xs font-medium">
-                  <span>Solijoniy</span>
-                  <span>Jahongir</span>
+              <>
+                <div className="flex flex-row items-center justify-center gap-3 text-mainindigo py-[5px] px-[10px] rounded-md border-[2px] border-solid border-mainindigo">
+                  <div className="flex flex-col text-xs font-medium">
+                    <span>Solijoniy</span>
+                    <span>Jahongir</span>
+                  </div>
+                  <Avatar>
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
                 </div>
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </div>
+                <CustomButton
+                  label="Chiqish"
+                  onClick={handleLogout}
+                  mainable
+                  outlined
+                  classNames="p-2.5 rounded text-sm"
+                />
+              </>
             ) : (
               <>
                 <CustomButton

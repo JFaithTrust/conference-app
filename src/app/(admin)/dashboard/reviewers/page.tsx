@@ -13,7 +13,7 @@ import { HiOutlinePlus } from "react-icons/hi2";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
-  const [allReviewer, setAllReviewer] = useState<UserType[]>([])
+  const [allReviewer, setAllReviewer] = useState<UserType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -32,12 +32,12 @@ const Users = () => {
 
   useEffect(() => {
     try {
-      const getUsers = async() => {
+      const getUsers = async () => {
         const reviewers = await getAllUsers("REVIEWER");
         const users = await getAllUsers("USER");
         setAllReviewer(reviewers);
         setAllUsers(users);
-      }
+      };
       getUsers();
     } catch (error) {
       console.log(error);
@@ -46,26 +46,38 @@ const Users = () => {
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
-    setAllReviewer([...allReviewer].sort((a, b) => {
-      const nameA = a.fullName?.toUpperCase();
-      const nameB = b.fullName?.toUpperCase();
-      if (sortByFullName === "asc") {
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      } else {
-        return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
-      }
-    }));
+    setAllReviewer(
+      [...allReviewer].sort((a, b) => {
+        const nameA = a.fullName?.toUpperCase();
+        const nameB = b.fullName?.toUpperCase();
+        if (sortByFullName === "asc") {
+          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        } else {
+          return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+        }
+      })
+    );
   };
 
   const handleSortByStatus = () => {
     setSortByStatus(sortByStatus === "asc" ? "desc" : "asc");
-    setAllReviewer([...allReviewer].sort((a, b) => {
-      if (sortByStatus === "asc") {
-        return a.userStatus < b.userStatus ? -1 : a.userStatus > b.userStatus ? 1 : 0;
-      } else {
-        return a.userStatus > b.userStatus ? -1 : a.userStatus < b.userStatus ? 1 : 0;
-      }
-    }));
+    setAllReviewer(
+      [...allReviewer].sort((a, b) => {
+        if (sortByStatus === "asc") {
+          return a.userStatus < b.userStatus
+            ? -1
+            : a.userStatus > b.userStatus
+            ? 1
+            : 0;
+        } else {
+          return a.userStatus > b.userStatus
+            ? -1
+            : a.userStatus < b.userStatus
+            ? 1
+            : 0;
+        }
+      })
+    );
   };
 
   const highlightSearchTerm = (text: string, term: string) => {
@@ -84,11 +96,15 @@ const Users = () => {
 
   return (
     <div className="flex flex-col gap-y-[18px] px-[30px]">
-      <UserAddForm allUsers={allUsers}  />
+      <UserAddForm allUsers={allUsers} />
       <div className="flex items-center py-4 justify-between">
-      <Button className="bg-white text-typeblue hover:bg-white/90 px-[30px] py-[12px]" onClick={onOpenUserAddModal}>
+        <Button
+          className="bg-white text-typeblue hover:bg-white/90 px-[30px] py-[12px]"
+          onClick={onOpenUserAddModal}
+        >
           <HiOutlinePlus className="mr-2 h-4 w-4" />
-          Add</Button>
+          Add
+        </Button>
         <Input
           placeholder="Enter name..."
           value={searchTerm}
@@ -99,12 +115,18 @@ const Users = () => {
       <div className="flex flex-col p-[18px] bg-mainwhite gap-y-1.5 border-[1px] border-solid border-[#DCDBFA] rounded-xl">
         <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
           <span className="w-[48px]">Id</span>
-          <div className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer" onClick={handleSortByFullName}>
+          <div
+            className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer"
+            onClick={handleSortByFullName}
+          >
             Full Name
             <ArrowUpDown className="h-4 w-4" />
           </div>
           <span className="w-[200px]">Phone Number</span>
-          <div className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer" onClick={handleSortByStatus}>
+          <div
+            className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer"
+            onClick={handleSortByStatus}
+          >
             Status
             <ArrowUpDown className="h-4 w-4" />
           </div>

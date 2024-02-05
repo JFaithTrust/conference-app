@@ -1,34 +1,31 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import useUserAddModal from "@/hooks/useUserAddModal";
 import { userAddSchema } from "@/lib/validation";
-import Modal from "../ui/Modal";
-import { useState } from "react";
-import { UserType } from "@/types";
 import CustomPagination from "../ui/CustomPagination";
-import { putAllUsers } from "@/fetch_api/fetchUsers";
-import axios from "@/fetch_api/axios";
-import { access_token } from "@/fetch_api/token";
+import Modal from "../ui/Modal";
+import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Input } from "../ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import useUserAddModal from "@/hooks/useUserAddModal";
+import { useEffect, useState } from "react";
+import { UserType } from "@/types";
 
 interface UserAddFormProps {
-  allUsers: UserType[];
-  directionId?: number;
+  allReviewers: UserType[];
+  setReviewersId: any;
+  // addingItem: string;
 }
 
-const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
+const ReviewerAddForm = ({
+  allReviewers,
+  setReviewersId,
+  // addingItem,
+}: UserAddFormProps) => {
+  const [editData, setEditData] = useState<UserType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -37,7 +34,7 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentPosts = allUsers.slice(firstPostIndex, lastPostIndex);
+  const currentPosts = editData.slice(firstPostIndex, lastPostIndex);
 
   const form = useForm<z.infer<typeof userAddSchema>>({
     resolver: zodResolver(userAddSchema),
@@ -46,23 +43,30 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
     },
   });
 
+  useEffect(() => {
+    setEditData(allReviewers);
+  }, [allReviewers]);
+
+
+  // useEffect(() => {
+  //   const addedData = allReviewers.filter((item) => {
+  //     return item.id.toString() === addingItem;
+  //   });
+  //   setEditData([...editData, ...addedData]);
+
+  // }, [addingItem]);
+
+
   function onSubmit(data: z.infer<typeof userAddSchema>) {
-    const usersIdList: any = [];
-    data.users.forEach((id) => {
-      usersIdList.push({
-        id: id,
-      });
-    });
-    if(directionId) {
-      axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-    } else {
-      putAllUsers(usersIdList);
-    }
+    setReviewersId(data.users);
+    // const unChekedData = editData.filter((item) => {
+    //   return !data.users.includes(item.id.toString());
+    // });
+    // setEditData(unChekedData);
     userAddModal.onClose();
+    // data.users = data.users.filter((item) => {
+    //   return item !== addingItem;
+    // });
   }
 
   const body = (
@@ -88,7 +92,7 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
                 {currentPosts
                   .filter((user) =>
                     user.fullName
-                      ?.toLowerCase()
+                      .toLowerCase()
                       .includes(searchTerm.toLowerCase())
                   )
                   .map((user) => (
@@ -164,9 +168,9 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
         >
           Bekor qilish
         </Button>
-        {allUsers.length > postsPerPage && (
+        {editData.length > postsPerPage && (
           <CustomPagination
-            totalPosts={allUsers.length}
+            totalPosts={editData.length}
             postsPerPage={postsPerPage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -194,4 +198,4 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
   );
 };
 
-export default UserAddForm;
+export default ReviewerAddForm;
