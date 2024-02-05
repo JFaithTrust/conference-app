@@ -1,39 +1,52 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserType } from "@/types";
 import { getAllUsers } from "@/fetch_api/fetchUsers";
-import { useRouter } from "next/navigation";
 import CustomPagination from "@/components/ui/CustomPagination";
+import useUserAddModal from "@/hooks/useUserAddModal";
+import { UserAddForm } from "@/components/forms";
+import { HiOutlinePlus } from "react-icons/hi2";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
+  const [allReviewer, setAllReviewer] = useState<UserType[]>([])
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
   const usersPerPage = 10;
   const lastUsersIndex = currentPage * usersPerPage;
   const firstUserIndex = lastUsersIndex - usersPerPage;
-  const currentUsers = allUsers.slice(firstUserIndex, lastUsersIndex);
+  const currentUsers = allReviewer.slice(firstUserIndex, lastUsersIndex);
   const [sortByFullName, setSortByFullName] = useState<"asc" | "desc">("asc");
   const [sortByStatus, setSortByStatus] = useState<"asc" | "desc">("asc");
 
-  const router = useRouter();
+  const userAddModal = useUserAddModal();
+
+  const onOpenUserAddModal = useCallback(() => {
+    userAddModal.onOpen();
+  }, [userAddModal]);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const data = await getAllUsers("USER");
-      setAllUsers(data);
-    };
-    getUsers();
-  }, []);
+    try {
+      const getUsers = async() => {
+        const reviewers = await getAllUsers("REVIEWER");
+        const users = await getAllUsers("USER");
+        setAllReviewer(reviewers);
+        setAllUsers(users);
+      }
+      getUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [allReviewer]);
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
-    setAllUsers([...allUsers].sort((a, b) => {
+    setAllReviewer([...allReviewer].sort((a, b) => {
       const nameA = a.fullName?.toUpperCase();
       const nameB = b.fullName?.toUpperCase();
       if (sortByFullName === "asc") {
@@ -46,7 +59,7 @@ const Users = () => {
 
   const handleSortByStatus = () => {
     setSortByStatus(sortByStatus === "asc" ? "desc" : "asc");
-    setAllUsers([...allUsers].sort((a, b) => {
+    setAllReviewer([...allReviewer].sort((a, b) => {
       if (sortByStatus === "asc") {
         return a.userStatus < b.userStatus ? -1 : a.userStatus > b.userStatus ? 1 : 0;
       } else {
@@ -71,7 +84,11 @@ const Users = () => {
 
   return (
     <div className="flex flex-col gap-y-[18px] px-[30px]">
-      <div className="flex items-center py-4 justify-end">
+      <UserAddForm allUsers={allUsers}  />
+      <div className="flex items-center py-4 justify-between">
+      <Button className="bg-white text-typeblue hover:bg-white/90 px-[30px] py-[12px]" onClick={onOpenUserAddModal}>
+          <HiOutlinePlus className="mr-2 h-4 w-4" />
+          Add</Button>
         <Input
           placeholder="Enter name..."
           value={searchTerm}
@@ -104,7 +121,6 @@ const Users = () => {
             .map((user) => (
               <div
                 key={user.id}
-                onClick={() => router.push(`/dashboard/users/${user.id}`)}
                 className={
                   "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
                 }
@@ -126,9 +142,9 @@ const Users = () => {
         </div>
       </div>
       <div className="flex items-center py-4 justify-end">
-        {allUsers.length > usersPerPage && (
+        {allReviewer.length > usersPerPage && (
           <CustomPagination
-            totalPosts={allUsers.length}
+            totalPosts={allReviewer.length}
             postsPerPage={usersPerPage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
