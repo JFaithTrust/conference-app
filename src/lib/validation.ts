@@ -39,3 +39,20 @@ export const ConfirmPhoneCodeSchema = z.object({
 export const DirectionAddSchema = z.object({
   name: z.string().min(3),
 });
+
+export const ConferenceAddSchema = z.object({
+  name: z.string().min(3),
+  description: z.string().min(3),
+  requirements: z.string().min(3),
+  adress: z.string().min(3),
+  cost: z.string().min(0),
+  startsAt: z.date({
+    required_error: "A date is required.",
+  }),
+  endsAt: z.date({
+    required_error: "A date is required.",
+  }),
+  deadlineForThesis: z.date({
+    required_error: "A date is required.",
+  }),
+});
