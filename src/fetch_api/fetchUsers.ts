@@ -3,6 +3,7 @@ import { UserType } from "@/types";
 import { access_token } from "./token";
 
 export const getAllUsers = async (role: string): Promise<UserType[]> => {
+  const access_token = localStorage.getItem('access_token');
   const { data } = await axios.get(`/api/user/all?role=${role}`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -12,6 +13,7 @@ export const getAllUsers = async (role: string): Promise<UserType[]> => {
 };
 
 export const getUserById = async (id: number): Promise<UserType[]> => {
+  const access_token = localStorage.getItem('access_token');
   const { data } = await axios.get(`/api/user/${id}`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -21,6 +23,7 @@ export const getUserById = async (id: number): Promise<UserType[]> => {
 };
 
 export const getUserByDirectionId = async (id: number): Promise<UserType[]> => {
+  const access_token = localStorage.getItem('access_token');
   const { data } = await axios.get(`/api/user/byDirection/${id}`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -30,6 +33,7 @@ export const getUserByDirectionId = async (id: number): Promise<UserType[]> => {
 }
 
 export const putAllUsers = async (users: UserType[]) => {
+  const access_token = localStorage.getItem('access_token');
   const { data } = await axios.put(`/api/user/make/reviewer`, users, {
     headers: {
       Authorization: `Bearer ${access_token}`,

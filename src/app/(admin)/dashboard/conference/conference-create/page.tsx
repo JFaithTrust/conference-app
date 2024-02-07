@@ -36,6 +36,8 @@ import { useEffect, useState } from "react";
 import { DirectionType } from "@/types";
 import { getAllDirections } from "@/fetch_api/fetchDirtection";
 import { Badge } from "@/components/ui/badge";
+import { access_token } from "@/fetch_api/token";
+import axios from "@/fetch_api/axios";
 
 const ConferenceCreate = () => {
   const [open, setOpen] = useState(false);
@@ -57,13 +59,51 @@ const ConferenceCreate = () => {
       name: "",
       description: "",
       requirements: "",
-      adress: "",
+      address: "",
       cost: "50 000 so'm",
     },
   });
 
-  function onSubmit(values: z.infer<typeof ConferenceAddSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof ConferenceAddSchema>) {
+    const conferense = {
+      name: values.name,
+      description: values.description,
+      requirements: values.requirements,
+      address: values.address,
+      cost: values.cost,
+      startsAt: values.startsAt,
+      endsAt: values.endsAt,
+      deadlineForThesis: values.deadlineForThesis,
+    };
+    try {
+      const response = await axios.post("/api/conference", conferense, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      const data = response.data;
+      const directionsIdList: any = [];
+      direction.filter((item) => {
+        if (selectedDirections.includes(item.name.toLowerCase())) {
+          directionsIdList.push({
+            id: item.id,
+          });
+        }
+      });
+
+      await axios.put(
+        `/api/conference/addDirection/${data.id}`,
+        directionsIdList,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const { isSubmitting } = form.formState;
@@ -128,7 +168,7 @@ const ConferenceCreate = () => {
                     {direction.map((d) => (
                       <CommandItem
                         key={d.id}
-                        value={d.id.toString()}
+                        value={d.name}
                         onSelect={(currentValue) => {
                           if (selectedDirections.includes(currentValue)) {
                             setSelectedDirections(
@@ -142,11 +182,23 @@ const ConferenceCreate = () => {
                               currentValue,
                             ]);
                           }
+                          // if (selectedDirections.includes(currentValue)) {
+                          //   setSelectedDirections(
+                          //     selectedDirections.filter(
+                          //       (dir) => dir !== currentValue
+                          //     )
+                          //   );
+                          // } else {
+                          //   setSelectedDirections([
+                          //     ...selectedDirections,
+                          //     currentValue,
+                          //   ]);
+                          // }
                           setValue(currentValue === value ? "" : currentValue);
                           setOpen(false);
                         }}
                       >
-                        {selectedDirections.includes(d.id.toString()) && (
+                        {selectedDirections.includes(d.name.toLowerCase()) && (
                           <Check className="mr-2 h-4 w-4 opacity-100" />
                         )}
                         {d.name}
@@ -163,14 +215,16 @@ const ConferenceCreate = () => {
             <div className="w-full border-[1px] border-solid border-violet-200 bg-white flex h-10 rounded-md px-3 py-2 text-sm">
               {selectedDirections.map((item) => (
                 <span key={item} className="mr-2">
-                  <Badge variant={'secondary'}>{direction.find((d) => d.id.toString() === item)?.name}</Badge>
+                  <Badge variant={"secondary"}>
+                    {direction.find((d) => d.name.toLowerCase() === item)?.name}
+                  </Badge>
                 </span>
               ))}
             </div>
           </div>
           <FormField
             control={form.control}
-            name="adress"
+            name="address"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Manzil</FormLabel>
@@ -356,7 +410,7 @@ const ConferenceCreate = () => {
                 name="cost"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Manzil</FormLabel>
+                    <FormLabel>To&apos;lov</FormLabel>
                     <FormControl>
                       <Input
                         readOnly
@@ -378,7 +432,10 @@ const ConferenceCreate = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <Button className="py-3 px-5 rounded-xl bg-typegreen hover:bg-typegreen/85 w-fit">
+            <Button
+              className="py-3 px-5 rounded-xl bg-typegreen hover:bg-typegreen/85 w-fit"
+              disabled={isSubmitting}
+            >
               Saqlash
             </Button>
           </div>

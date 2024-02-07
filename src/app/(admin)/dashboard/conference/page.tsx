@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -10,82 +10,11 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
 import { ConferenceType } from "@/types";
 import CustomPagination from "@/components/ui/CustomPagination";
-
-const data: ConferenceType[] = [
-  {
-    id: 1,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 2,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 3,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 4,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 5,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 6,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 7,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 8,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 9,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-  {
-    id: 10,
-    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.",
-    startsAt: "2021-09-01",
-    endsAt: "2021-09-01",
-    deadlineForThesis: "2021-09-01",
-  },
-];
+import { getAllConferences } from "@/fetch_api/fetchConference";
+import { format } from "date-fns";
 
 const Conference = () => {
-  const [allConferences, setAllConferences] = useState(data);
+  const [allConferences, setAllConferences] = useState<ConferenceType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -99,6 +28,18 @@ const Conference = () => {
   const [sortByFullName, setSortByFullName] = useState<"asc" | "desc">("asc");
 
   const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const getConferences = async () => {
+        const data = await getAllConferences();
+        setAllConferences(data);
+      };
+      getConferences();
+    } catch (error) {
+      console.log("Error in fetching conferences", error);
+    }
+  }, []);
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
@@ -135,7 +76,9 @@ const Conference = () => {
         <div className="flex items-center py-4 justify-between">
           <Button
             className="bg-white text-typeblue hover:bg-white/90 px-[30px] py-[12px]"
-            onClick={() => router.push("/dashboard/conference/conference-create")}
+            onClick={() =>
+              router.push("/dashboard/conference/conference-create")
+            }
           >
             <HiOutlinePlus className="mr-2 h-4 w-4" />
             Create
@@ -182,9 +125,15 @@ const Conference = () => {
                   <span className="w-[350px] text-start overflow-hidden truncate">
                     {highlightSearchTerm(conf.name, searchTerm)}
                   </span>
-                  <span className="w-[150px]">{conf.startsAt}</span>
-                  <span className="w-[150px]">{conf.endsAt}</span>
-                  <span className="w-[150px]">{conf.deadlineForThesis}</span>
+                  <span className="w-[150px]">
+                    {format(conf.startsAt, "dd-MM-yyyy")}
+                  </span>
+                  <span className="w-[150px]">
+                    {format(conf.endsAt, "dd-MM-yyyy")}
+                  </span>
+                  <span className="w-[150px]">
+                    {format(conf.deadlineForThesis, "dd-MM-yyyy")}
+                  </span>
                   <div className="lowercase flex flex-row justify-start w-[130px] gap-x-2 items-center">
                     <Button
                       variant="ghost"

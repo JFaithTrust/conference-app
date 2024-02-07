@@ -1,9 +1,9 @@
 import { DirectionType } from "../types";
-import { access_token } from "./token";
 import axios from "./axios";
 
 
 export const getDirectionByConferenceId = async (id: number): Promise<DirectionType[]> => {
+    const access_token = localStorage.getItem('access_token');
     const { data } = await axios.get(`/api/direction/byConference/${id}`,{
         headers: {
         Authorization: `Bearer ${access_token}`,
@@ -13,6 +13,7 @@ export const getDirectionByConferenceId = async (id: number): Promise<DirectionT
 }
 
 export const getAllDirections = async (): Promise<DirectionType[]> => {
+    const access_token = localStorage.getItem('access_token');
     const { data } = await axios.get(`/api/direction/all`,{
         headers: {
         Authorization: `Bearer ${access_token}`,

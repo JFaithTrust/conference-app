@@ -27,7 +27,7 @@ export interface ConferenceType{
 export interface UserType {
   id: number;
   fullName: string;
-  email: string;
+  email?: string;
   phoneNumber: string;
   userStatus: "ACTIVE" | "INACTIVE";
 }
@@ -35,4 +35,16 @@ export interface UserType {
 export interface DirectionType {
   id: number;
   name: string;
+}
+
+export interface ApplicationType {
+  id: number;
+  name: string;
+  description?: string;
+  authors?: string;
+  thesisFile?: string;
+  owner: UserType;
+  reviewer: UserType;
+  conference?: ConferenceType;
+  direction?: DirectionType;
 }

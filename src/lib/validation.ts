@@ -44,7 +44,7 @@ export const ConferenceAddSchema = z.object({
   name: z.string().min(3),
   description: z.string().min(3),
   requirements: z.string().min(3),
-  adress: z.string().min(3),
+  address: z.string().min(3),
   cost: z.string().min(0),
   startsAt: z.date({
     required_error: "A date is required.",
