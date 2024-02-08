@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IoCalendarOutline } from "react-icons/io5";
 import CountdownTimer from "@/app/(home)/home_components/CountdownTimer";
-import ReviewerForm from "@/components/forms/ArticleForm";
 import Button from "@/components/ui/CustomButton";
 import CustomButton from "@/components/ui/CustomButton";
 import useRegisterModal from "@/hooks/useRegisterModal";
@@ -13,6 +12,8 @@ import { getConferenceById } from "@/fetch_api/fetchConference";
 import { ConferenceType, DirectionType } from "@/types";
 import { getDirectionByConferenceId } from "@/fetch_api/fetchDirtection";
 import { formatDate } from "@/functions/formats";
+import { format } from "date-fns";
+import ArticleForm from "@/components/forms/ArticleForm";
 
 const ConferenceDetail = ({ params }: { params: { id: number } }) => {
   const [isAuth, setIsAuth] = useState(false);
@@ -97,7 +98,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
               <div className="flex flex-row gap-x-3 items-center">
                 <div className="border-[1px] border-solid border-violet-200 rounded-md px-[30px] py-[16px]">
                   <span className="leading-[100%] font-main-text font-semibold text-2xl">
-                    {formatDate(conference.endsAt, true)}
+                    {format(conference.endsAt, "dd.MM.yyyy")}
                   </span>
                 </div>
                 <div className="border-[1px] border-solid border-violet-200 rounded-md px-[20px] py-[16px]">
@@ -161,7 +162,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
               <h2 className="text-3xl font-semibold">
                 Maqolani jo&apos;natish
               </h2>
-              <ReviewerForm name={conference.name} id={conference.id} direction={direction} />
+              <ArticleForm name={conference.name} id={conference.id} direction={direction} />
             </div>
           </div>
         </div>

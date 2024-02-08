@@ -8,7 +8,7 @@ export interface ConferenceType{
   id: number;
   name: string;
   startsAt: string;
-  endsAt: string;
+  endsAt: string | Date;
   deadlineForThesis: string;
   cost?: string;
   description?: string;
@@ -37,14 +37,20 @@ export interface DirectionType {
   name: string;
 }
 
+export interface File {
+  id: number;
+  downloadLink: string;
+}
+
 export interface ApplicationType {
   id: number;
   name: string;
   description?: string;
   authors?: string;
-  thesisFile?: string;
+  thesisFile?: File;
   owner: UserType;
   reviewer: UserType;
   conference?: ConferenceType;
   direction?: DirectionType;
+  createdAt?: string | Date;
 }

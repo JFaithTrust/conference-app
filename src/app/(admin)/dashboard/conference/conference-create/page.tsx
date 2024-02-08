@@ -93,7 +93,7 @@ const ConferenceCreate = () => {
       });
 
       await axios.put(
-        `/api/conference/addDirection/${data.id}`,
+        `/api/conference/editDirections/${data.id}`,
         directionsIdList,
         {
           headers: {
@@ -446,32 +446,3 @@ const ConferenceCreate = () => {
 };
 
 export default ConferenceCreate;
-
-{
-  /* {showDirtections && (
-            <div className="w-full border-[1px] border-solid border-violet-200 bg-white flex h-10 rounded-md px-3 py-2 text-sm">
-              {showDirtections.map((item) => (
-                <span key={item.id} className="mr-2">
-                  {item.name}
-                </span>
-              ))}
-            </div>
-          )} */
-}
-// const [showDirtections, setShowDirtections] = useState<DirectionType[]>([]);
-//   const direct: DirectionType[] = [];
-// useEffect(() => {
-//   if (value) {
-//     direction.forEach((item) => {
-//       if (item.id.toString() === value) {
-//         direct.push(item);
-//       }
-//     });
-//   }
-//   setShowDirtections(direct);
-//   setDirection(
-//     direction.filter(
-//       (item) => !showDirtections.map((item2) => item2.id).includes(item.id)
-//     )
-//   );
-// }, [value]);

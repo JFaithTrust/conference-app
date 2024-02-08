@@ -1,183 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { FaEye, FaEdit } from "react-icons/fa";
-import { AiFillDelete } from "react-icons/ai";
-import { HiOutlinePlus } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
 import CustomPagination from "@/components/ui/CustomPagination";
-
-const data: ApplicationType[] = [
-  {
-    id: 1,
-    name: "Aplllication 1",
-    owner: {
-      id: 1,
-      fullName: "User 1",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 1,
-      fullName: "User 1",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 2,
-    name: "Aplllication 12",
-    owner: {
-      id: 2,
-      fullName: "User 2",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 2,
-      fullName: "User 2",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 3,
-    name: "Aplllication 13",
-    owner: {
-      id: 3,
-      fullName: "User 3",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 3,
-      fullName: "User 3",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 4,
-    name: "Aplllication 14",
-    owner: {
-      id: 4,
-      fullName: "User 4",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 4,
-      fullName: "User 4",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 5,
-    name: "Aplllication 15",
-    owner: {
-      id: 5,
-      fullName: "User 5",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 5,
-      fullName: "User 5",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 6,
-    name: "Aplllication 16",
-    owner: {
-      id: 6,
-      fullName: "User 6",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 6,
-      fullName: "User 6",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 7,
-    name: "Aplllication 17",
-    owner: {
-      id: 7,
-      fullName: "User 7",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 7,
-      fullName: "User 7",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 8,
-    name: "Aplllication 18",
-    owner: {
-      id: 8,
-      fullName: "User 8",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 8,
-      fullName: "User 8",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 9,
-    name: "Aplllication 19",
-    owner: {
-      id: 9,
-      fullName: "User 9",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 9,
-      fullName: "User 9",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-  {
-    id: 10,
-    name: "Aplllication 20",
-    owner: {
-      id: 10,
-      fullName: "User 10",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-    reviewer: {
-      id: 10,
-      fullName: "User 10",
-      phoneNumber: "123456789",
-      userStatus: "ACTIVE",
-    },
-  },
-];
+import { getAllApplications } from "@/fetch_api/fetchApplications";
 
 const SendArticles = () => {
-  const [allApplications, setAllApplications] = useState(data);
+  const [allApplications, setAllApplications] = useState<ApplicationType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const getAllAplications = async () => {
+      const applications = await getAllApplications();
+      setAllApplications(applications);
+    };
+    getAllAplications();
+  }, []);
 
   const usersPerPage = 10;
   const lastConferenceIndex = currentPage * usersPerPage;
@@ -237,14 +80,16 @@ const SendArticles = () => {
               className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer text-start"
               onClick={handleSortByFullName}
             >
-              Name Of Application
+              Maqola
               <ArrowUpDown className="h-4 w-4" />
             </div>
-            <span className="w-[250px]">Editor Name</span>
-            <span className="w-[250px]">Owner Name</span>
+            <span className="w-[250px]">Muharrir</span>
+            <span className="w-[250px]">
+              Jo&apos;natuvchi
+            </span>
             <div className="flex flex-row justify-between w-[200px]">
               <span className="text-center w-[100px]">Status</span>
-              <span className="text-center">Payment</span>
+              <span className="text-center">To&apos;lov</span>
             </div>
           </div>
           <div className="flex flex-col gap-y-[9px] w-full">
@@ -280,10 +125,10 @@ const SendArticles = () => {
                     {highlightSearchTerm(app.name, searchTerm)}
                   </span>
                   <span className="w-[250px]">
-                    {highlightSearchTerm(app.owner.fullName, searchTerm)}
+                    {app.reviewer?.fullName ? highlightSearchTerm(app.reviewer.fullName, searchTerm) : (<span className="text-typered">Birlashtirilmagan</span>)}
                   </span>
                   <span className="w-[250px]">
-                    {highlightSearchTerm(app.reviewer.fullName, searchTerm)}
+                    {highlightSearchTerm(app.owner.fullName, searchTerm)}
                   </span>
                   <div className="flex flex-row justify-between w-[200px]">
                     <Button className="capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85">

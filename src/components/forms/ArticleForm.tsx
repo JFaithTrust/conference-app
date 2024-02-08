@@ -109,6 +109,10 @@ const ArticleForm = ({ name, id, direction }: Props) => {
       .catch((err) => {
         setError(err.response.data.message);
       });
+
+    form.reset();
+    setSelectedFile("");
+    setValue("");
   }
 
   const { isSubmitting } = form.formState;
@@ -227,7 +231,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col p-[18px] bg-mainwhite gap-6 rounded-xl border-[1px] border-solid border-violet-200">
               <h3 className="text-center text-sm leading-[100%] font-normal font-main-text">
-              {selectedFile ? `Tanlangan fayl` : "Fayl yuklash"}
+                {selectedFile ? `Tanlangan fayl` : "Fayl yuklash"}
               </h3>
               <label className="cursor-pointer rounded-xl bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
                 {selectedFile ? `${selectedFile}` : "Yuklash"}
@@ -242,7 +246,6 @@ const ArticleForm = ({ name, id, direction }: Props) => {
             <CustomButton
               disabled={isSubmitting}
               label={"Submit"}
-              onClick={() => onSubmit(form.getValues())}
               success
               classNames="px-[48px] py-[12px] rounded-[19px]"
             />

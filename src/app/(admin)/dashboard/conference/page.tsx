@@ -12,6 +12,8 @@ import { ConferenceType } from "@/types";
 import CustomPagination from "@/components/ui/CustomPagination";
 import { getAllConferences } from "@/fetch_api/fetchConference";
 import { format } from "date-fns";
+import axios from "@/fetch_api/axios";
+import { access_token } from "@/fetch_api/token";
 
 const Conference = () => {
   const [allConferences, setAllConferences] = useState<ConferenceType[]>([]);
@@ -69,6 +71,18 @@ const Conference = () => {
       </span>
     ));
   };
+
+  const handeleDelete = (id: number) => {
+    axios.delete(`/api/conference/${id}`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      },
+    }).then((res) => {
+      console.log(res);
+      const newConferences = allConferences.filter((conf) => conf.id !== id);
+      setAllConferences(newConferences);
+    });
+  }
 
   return (
     <div className="flex flex-col gap-y-[18px] px-[30px]">
@@ -139,16 +153,14 @@ const Conference = () => {
                       variant="ghost"
                       size={"icon"}
                       className="px-0"
-                      // onClick={() => {
-                      //   console.log(conf.id);
-                      // }}
+                      onClick={() => router.push(`/dashboard/conference/${conf.id}`)}
                     >
                       <FaEye size={22} className="text-typeblue" />
                     </Button>
-                    <Button variant="ghost" size={"icon"} className="px-0">
+                    <Button variant="ghost" size={"icon"} className="px-0" onClick={() => router.push(`/dashboard/conference/conference-edit/${conf.id}`)}>
                       <FaEdit size={20} className="text-typeyellow" />
                     </Button>
-                    <Button variant="ghost" size={"icon"} className="px-0">
+                    <Button variant="ghost" size={"icon"} className="px-0" onClick={() => handeleDelete(conf.id)}>
                       <AiFillDelete size={20} className="text-typered" />
                     </Button>
                   </div>
