@@ -11,10 +11,9 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import axios from "@/fetch_api/axios";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 
-const ArticleInfo = ({ params }: { params: { id: number } }) => {
+const AcceptedArticle = ({ params }: { params: { id: number } }) => {
   const [appData, setAppData] = useState<ApplicationType>();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -193,4 +192,4 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
   );
 };
 
-export default ArticleInfo;
+export default AcceptedArticle;

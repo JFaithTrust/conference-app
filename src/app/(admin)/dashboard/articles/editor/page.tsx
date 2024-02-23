@@ -7,25 +7,27 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
 import CustomPagination from "@/components/ui/CustomPagination";
-import { getAllFeedbacks } from "@/fetch_api/fetchApplications";
+import { getReviewersApplications } from "@/fetch_api/fetchApplications";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 
-const MistakenArticle = () => {
+const CheckArticles = () => {
   const [allApplications, setAllApplications] = useState<ApplicationType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortByFullName, setSortByFullName] = useState<"asc" | "desc">("asc");
+  const [userRole, setUserRole] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-
   useEffect(() => {
-    const getByStatus = async () => {
-      const feedbacks = await getAllFeedbacks();
-      setAllApplications(feedbacks);
+    const getAllAplications = async () => {
+      const applications = await getReviewersApplications();
+      setAllApplications(applications);
       setLoading(false);
     };
-    getByStatus();
+    getAllAplications();
+    if (localStorage.getItem("role")) {
+      setUserRole(localStorage.getItem("role") || "");
+    }
   }, []);
 
   const usersPerPage = 10;
@@ -35,6 +37,8 @@ const MistakenArticle = () => {
     firstConferenceIndex,
     lastConferenceIndex
   );
+
+  const router = useRouter();
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
@@ -78,7 +82,7 @@ const MistakenArticle = () => {
         </div>
         <div className="flex flex-col p-[18px] bg-mainwhite gap-y-1.5 border-[1px] border-solid border-[#DCDBFA] rounded-xl">
           {loading ? (
-            <div className="w-full h-[200px] flex items-center justify-center"><Loading /></div>
+            <Loading />
           ) : (
             <>
               <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
@@ -87,14 +91,17 @@ const MistakenArticle = () => {
                   className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer text-start"
                   onClick={handleSortByFullName}
                 >
-                  Maqola nomi
+                  Maqola
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
-                <span className="w-[250px]">Muharrir ismi</span>
-                <span className="w-[250px]">Jo&apos;natuvchi ismi</span>
-                <span className="text-center w-[100px]">Status</span>
+                <span className="w-[250px]">Muharrir</span>
+                <span className="w-[250px]">Jo&apos;natuvchi</span>
+                <div className="flex flex-row justify-between w-[200px]">
+                  <span className="text-center w-[100px]">Status</span>
+                  <span className="text-center w-[100px]">To&apos;lov</span>
+                </div>
               </div>
-              {allApplications.length > 0 ? (
+              {currentApplications.length > 0 ? (
                 <div className="flex flex-col gap-y-[9px] w-full">
                   {currentApplications
                     ?.filter(
@@ -123,7 +130,7 @@ const MistakenArticle = () => {
                       <div
                         key={app.id}
                         onClick={() =>
-                          router.push(`/dashboard/articles/mistake/${app.id}`)
+                          router.push(`/dashboard/articles/editor/${app.id}`)
                         }
                         className={
                           "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
@@ -134,23 +141,47 @@ const MistakenArticle = () => {
                           {highlightSearchTerm(app.name, searchTerm)}
                         </span>
                         <span className="w-[250px]">
-                          {highlightSearchTerm(app.owner.fullName, searchTerm)}
-                        </span>
-                        <span className="w-[250px]">
-                          {highlightSearchTerm(
-                            app.reviewer.fullName,
-                            searchTerm
+                          {app.reviewer?.fullName ? (
+                            highlightSearchTerm(
+                              app.reviewer.fullName,
+                              searchTerm
+                            )
+                          ) : (
+                            <span className="text-typered">
+                              Birlashtirilmagan
+                            </span>
                           )}
                         </span>
-                        <Button className="capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 w-[100px]">
-                          {app.status}
-                        </Button>
+                        <span className="w-[250px]">
+                          {highlightSearchTerm(app.owner.fullName, searchTerm)}
+                        </span>
+                        <div className="flex flex-row justify-between w-[200px]">
+                          <div className="w-[100px] flex justify-center">
+                            <Button
+                              className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typeblue hover:bg-typeblue/85 ${
+                                app.status === "FEEDBACK" && "bg-typeyellow"
+                              }`}
+                            >
+                              {app.status}
+                            </Button>
+                          </div>
+                          <div className="w-[100px] flex justify-end">
+                            <Button
+                              className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 ${
+                                app.paymentStatus === "UNPAID" &&
+                                "bg-typeyellow"
+                              }`}
+                            >
+                              {app.paymentStatus}
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     ))}
                 </div>
               ) : (
-                <div className="w-full flex items-center justify-center h-[200px] text-xl font-semibold font-source-serif-pro text-muted-foreground border border-solid rounded-xl">
-                  Hozircha qabul qilingan maqolalar yo&apos;q
+                <div className="flex items-center justify-center w-full border-[1px] border-solid border-[#DCDBFA] rounded-xl h-[200px] text-xl text-muted-foreground font-semibold font-source-serif-pro">
+                  Birlashtirilgan maqolalar mavjud emas
                 </div>
               )}
             </>
@@ -171,4 +202,4 @@ const MistakenArticle = () => {
   );
 };
 
-export default MistakenArticle;
+export default CheckArticles;

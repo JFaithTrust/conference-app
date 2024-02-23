@@ -6,15 +6,19 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
-import { getApplicationById } from "@/fetch_api/fetchApplications";
+import {
+  getApplicationById,
+  putApplicationStatus,
+} from "@/fetch_api/fetchApplications";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import axios from "@/fetch_api/axios";
 import Loading from "@/app/(home)/home_components/loading/Loading";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
-const ArticleInfo = ({ params }: { params: { id: number } }) => {
+const CheckArticles = ({ params }: { params: { id: number } }) => {
   const [appData, setAppData] = useState<ApplicationType>();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -35,6 +39,45 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
       </div>
     );
   }
+
+  const handleAccepted = async (id: number) => {
+    try {
+      await putApplicationStatus(id, "ACCEPTED");
+      router.back();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
+    }
+  };
+
+  const handleFeedback = async (id: number) => {
+    try {
+      await putApplicationStatus(id, "FEEDBACK");
+      router.back();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
+    }
+  };
+
+  const handleRejected = async (id: number) => {
+    try {
+      await putApplicationStatus(id, "REJECTED");
+      router.back();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
+    }
+  };
 
   return (
     <>
@@ -163,25 +206,40 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
             <div className="flex flex-row justify-between">
               <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-transparent items-center">
                 <span className="font-semibold font-source-serif-pro text-lg">
-                  Status
+                  Qabul qilish
                 </span>
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
-                  <Button className={`rounded-2xl px-3 py-1.5 bg-typegreen text-white hover:bg-typegreen/85 ${appData.status === 'FEEDBACK' && 'bg-typeyellow'}`}>
-                    <span>{appData.status}</span>
+                  <Button
+                    className={`rounded-2xl px-3 py-1.5 bg-typegreen text-white hover:bg-typegreen/85`}
+                    onClick={() => handleAccepted(appData.id)}
+                  >
+                    <span>Accepted</span>
                   </Button>
                 </div>
               </div>
               <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-transparent items-center">
                 <span className="font-semibold font-source-serif-pro text-lg">
-                  To&apos;lov
+                  Qaytarish
                 </span>
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
                   <Button
-                    className={`rounded-2xl px-6 py-1.5 bg-typegreen text-white hover:bg-typegreen/85 ${
-                      appData.paymentStatus === "UNPAID" && "bg-typeyellow"
-                    }`}
+                    className={`rounded-2xl px-6 py-1.5 bg-typeyellow text-white hover:bg-typeyellow/85 $`}
+                    onClick={() => handleFeedback(appData.id)}
                   >
-                    <span>{appData.paymentStatus}</span>
+                    <span>Feedback</span>
+                  </Button>
+                </div>
+              </div>
+              <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-transparent items-center">
+                <span className="font-semibold font-source-serif-pro text-lg">
+                  Bloklash
+                </span>
+                <div className="flex flex-row justify-between items-center w-full gap-x-3">
+                  <Button
+                    className={`rounded-2xl px-6 py-1.5 bg-typered text-white hover:bg-typered/85`}
+                    onClick={() => handleRejected(appData.id)}
+                  >
+                    <span>Rejected</span>
                   </Button>
                 </div>
               </div>
@@ -193,4 +251,4 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
   );
 };
 
-export default ArticleInfo;
+export default CheckArticles;

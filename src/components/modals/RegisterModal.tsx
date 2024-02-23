@@ -18,7 +18,8 @@ import { Input } from "../ui/input";
 import Modal from "../ui/Modal";
 import CustomButton from "../ui/CustomButton";
 import axios from "@/fetch_api/axios";
-import { useRouter } from "next/navigation";
+import { ToastAction } from "../ui/toast";
+import { toast } from "../ui/use-toast";
 
 const RegisterModal = () => {
   const registerModal = useRegisterModal();
@@ -73,8 +74,6 @@ function RegisterStep1({
   setSaved: Dispatch<SetStateAction<{ phoneNumber: string; password: string }>>;
   setStep: Dispatch<SetStateAction<number>>;
 }) {
-  const [error, setError] = useState("");
-
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -95,10 +94,19 @@ function RegisterStep1({
         setStep(2);
       }
     } catch (error: any) {
-      if (error.response.message) {
-        setError(error.response.message);
+      if (error?.response?.data?.message) {
+        toast({
+          title: error?.response?.data?.message,
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
       } else {
-        setError("Something went wrong");
+        toast({
+          title:
+            "Qandaydir xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring.",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
       }
     }
   }
@@ -200,9 +208,7 @@ function RegisterStep2({
 }: {
   saved: { phoneNumber: string; password: string };
 }) {
-  const [error, setError] = useState("");
   const registerModal = useRegisterModal();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof ConfirmPhoneCodeSchema>>({
     resolver: zodResolver(ConfirmPhoneCodeSchema),
@@ -228,15 +234,22 @@ function RegisterStep2({
         const encodedData = userToken?.split(".")[1];
         const { role } = JSON.parse(atob(encodedData || ""));
         localStorage.setItem("role", role);
-        if (role === "SUPER_ADMIN") {
-          router.replace("/dashboard");
-        }
+        window.location.reload();
       }
     } catch (error: any) {
-      if (error.response.message) {
-        setError(error.response.message);
+      if (error?.response?.data?.message) {
+        toast({
+          title: error?.response?.data?.message,
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
       } else {
-        setError("Something went wrong. Please try again later.");
+        toast({
+          title:
+            "Qandaydir xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring.",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
       }
     }
   }

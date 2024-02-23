@@ -22,6 +22,19 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const forgotPasswordSchema1 = z.object({
+  phoneNumber: z.string().min(13),
+});
+
+export const forgotPasswordSchema2 = z.object({
+  smsCode: z.string().min(4).max(4),
+});
+
+export const forgotPasswordSchema3 = z.object({
+  password: passwordSchema,
+  confirmPassword: passwordSchema,
+});
+
 export const createPostSchema = z.object({
   name: z.string(),
   authors: z.string().nonempty("Please write authors name."),

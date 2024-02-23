@@ -3,12 +3,7 @@ import { ConferenceType } from "../types";
 
 
 export const getConferenceById = async (id: number): Promise<ConferenceType> => {
-  const access_token = localStorage.getItem('access_token');
-  const { data } = await axios.get(`/api/conference/${id}`,{
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
+  const { data } = await axios.get(`/api/conference/${id}`);
   return data;
 }
 

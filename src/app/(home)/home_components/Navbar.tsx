@@ -7,11 +7,26 @@ import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import axios from "@/fetch_api/axios";
+import { UserType } from "@/types";
+import { getUserInfo } from "@/fetch_api/fetchUsers";
 
 const Navbar = () => {
   const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState<UserType>();
+  const [role, setRole] = useState("");
+
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+  const router = useRouter();
 
   const onOpenRegisterModal = useCallback(() => {
     registerModal.onOpen();
@@ -21,15 +36,16 @@ const Navbar = () => {
     loginModal.onOpen();
   }, [loginModal]);
 
-  // nimadir qilish kerak
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = window.localStorage.getItem("access_token");
-      if (token) {
+      const role = window.localStorage.getItem("role");
+      if (token && role) {
+        getUserInfo().then((res) => setUser(res));
         setIsAuth(true);
+        setRole(role);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = () => {
@@ -37,7 +53,6 @@ const Navbar = () => {
       window.localStorage.removeItem("access_token");
       setIsAuth(false);
     }
-    window.location.reload();
   };
 
   return (
@@ -50,37 +65,29 @@ const Navbar = () => {
           >
             <div className="relative leading-[100%] font-medium">Logo</div>
           </Link>
-          <div className="shrink-0 flex flex-row items-center justify-center gap-[48px] text-xl">
-            <div className="overflow-hidden flex flex-row items-center justify-start">
+          <div className="flex flex-row items-center justify-center gap-[48px] text-xl">
+            <div className="flex flex-row items-center justify-start">
               <Link href={"/"} className="relative leading-[100%] font-medium">
                 Bosh sahifa
               </Link>
             </div>
             {isAuth && (
-              <div className="overflow-hidden flex flex-row items-center justify-start">
-                <Link
-                  href={"/articles"}
-                  className="relative leading-[100%] font-medium"
-                >
+              <div className="flex flex-row items-center justify-start">
+                <Link href={"/articles"} className="relative font-medium">
                   Mening maqolalarim
                 </Link>
               </div>
             )}
-            <div className="overflow-hidden flex flex-row items-center justify-start">
-              <Link
-                href={"/conferences"}
-                className="relative leading-[100%] font-medium"
-              >
+            <div className="flex flex-row items-center justify-start">
+              <Link href={"/conferences"} className="relative font-medium">
                 Konferensiyalar
               </Link>
             </div>
-            <div className="shrink-0 flex flex-row items-center justify-start">
-              <div className="relative leading-[100%] font-medium">
-                Biz haqimizda
-              </div>
+            <div className="flex flex-row items-center justify-start">
+              <div className="relative font-medium">Biz haqimizda</div>
             </div>
-            <div className="overflow-hidden flex flex-row items-center justify-start">
-              <div className="relative leading-[100%] font-medium">Aloqa</div>
+            <div className="flex flex-row items-center justify-start">
+              <div className="relative font-medium">Aloqa</div>
             </div>
           </div>
           <div className="shrink-0 flex flex-row items-center justify-between gap-2">
@@ -98,26 +105,47 @@ const Navbar = () => {
             </div>
             {isAuth ? (
               <>
-                <div className="flex flex-row items-center justify-center gap-3 text-mainindigo py-[5px] px-[10px] rounded-md border-[2px] border-solid border-mainindigo">
-                  <div className="flex flex-col text-xs font-medium">
-                    <span>Solijoniy</span>
-                    <span>Jahongir</span>
-                  </div>
-                  <Avatar>
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </div>
-                <CustomButton
-                  label="Chiqish"
-                  onClick={handleLogout}
-                  mainable
-                  outlined
-                  classNames="p-2.5 rounded text-sm"
-                />
+                <Popover>
+                  <PopoverTrigger>
+                    <div className="flex flex-row items-center justify-center gap-3 text-mainindigo py-[5px] px-[10px] rounded-md border-[2px] border-solid border-mainindigo">
+                      <div className="flex flex-col text-xs font-medium w-24">
+                        <span>{user?.fullName}</span>
+                      </div>
+                      <Avatar>
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className={`flex flex-col ${
+                      role === "SUPER_ADMIN" || role === "REVIEWER"
+                        ? "gap-y-2"
+                        : ""
+                    }`}
+                  >
+                    <Button
+                      onClick={handleLogout}
+                      className="p-2.5 rounded text-sm flex flex-row justify-between bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full"
+                    >
+                      Chiqish
+                      <ArrowRight className="w-5 h-4" />
+                    </Button>
+                    {(role.length > 0 && role === "SUPER_ADMIN") ||
+                    (role.length > 0 && role === "REVIEWER") ? (
+                      <Button
+                        onClick={() => router.push("/dashboard")}
+                        className="p-2.5 rounded text-sm flex flex-row gap-x-2 bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full"
+                      >
+                        Dashboard
+                        <ArrowRight className="w-5 h-4" />
+                      </Button>
+                    ) : null}
+                  </PopoverContent>
+                </Popover>
               </>
             ) : (
               <>

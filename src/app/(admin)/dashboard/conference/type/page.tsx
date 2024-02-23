@@ -15,6 +15,7 @@ import useUserAddModal from "@/hooks/useUserAddModal";
 import axios from "@/fetch_api/axios";
 import { access_token } from "@/fetch_api/token";
 import CustomPagination from "@/components/ui/CustomPagination";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const ConferenceType = () => {
   const [open, setOpen] = useState(0);
@@ -24,6 +25,7 @@ const ConferenceType = () => {
   const [allReviewers, setAllReviewers] = useState<UserType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const directionPerPage = 6;
   const lastDirectionIndex = currentPage * directionPerPage;
@@ -60,6 +62,7 @@ const ConferenceType = () => {
     const getData = async () => {
       const data = await getAllDirections();
       setAllDirections(data);
+      setLoading(false);
     };
     getData();
   }, []);
@@ -85,6 +88,7 @@ const ConferenceType = () => {
 
   const handleDelate = (id: number) => {
     try {
+      setReviewers(reviewers.filter((item) => item.id !== id));
       const reviewerId = { id: id };
       axios.put(`/api/direction/removeReviewer/${directionId}`, reviewerId, {
         headers: {
@@ -118,85 +122,91 @@ const ConferenceType = () => {
           />
         </div>
         <div className="rounded-2xl border bg-mainwhite flex flex-col gap-y-3 p-[18px]">
-          <h2 className="py-[12px] font-source-serif-pro text-xl font-semibold">
-            Konferensiya yo&apos;nalishlari
-          </h2>
-          {allDirections ? (
-            <>
-              {currentDirection
-                ?.filter((d) =>
-                  d.name
-                    ?.toLowerCase()
-                    // .includes(searchTerm.toLowerCase())
-                    .replace(/\s+/g, "")
-                    .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
-                )
-                .map((item) => (
-                  <div key={item.id} className="flex flex-col gap-y-1.5">
-                    <div className="flex flex-col">
-                      <div
-                        className={`flex flex-row justify-between items-center p-[12px] border-[1px] rounded-xl border-[#E2DEDE] ${
-                          open === item.id && "border-b-0 rounded-b-none"
-                        }`}
-                      >
-                        <p className="text-lg font-medium">
-                          {highlightSearchTerm(item.name, searchTerm)}
-                        </p>
-                        <Button
-                          className="px-3 py-1.5 bg-typeblue hover:bg-typeblue/85"
-                          onClick={() => toggleClick(item.id)}
-                        >
-                          <MdOutlineKeyboardArrowDown
-                            className={`h-6 w-6 ${
-                              open === item.id && "rotate-180"
-                            }`}
-                          />
-                          <span>Editors</span>
-                        </Button>
-                      </div>
-                      <div
-                        className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 ${
-                          open === item.id ? "rounded-t-none" : "hidden"
-                        }`}
-                      >
-                        <Button
-                          className="px-[30px] py-[9px] bg-typeyellow hover:bg-typeyellow/85 rounded-xl w-fit"
-                          onClick={onOpenUserAddModal}
-                        >
-                          {" "}
-                          + Muharrir qo&apos;shish
-                        </Button>
-                        {reviewers.map((reviewer) => (
-                          <div
-                            key={reviewer.id}
-                            className="flex items-center justify-between p-[6px] border-[1px] rounded-xl border-[#E2DEDE]"
-                          >
-                            <p className="text-base font-normal p-[6px] w-[200px] overflow-hidden">
-                              {reviewer.fullName}
-                            </p>
-                            <p className="text-base font-normal p-[6px]">
-                              {reviewer.phoneNumber}
-                            </p>
-                            <div className="flex items-center gap-x-[30px]">
-                              <Button className="bg-typegreen hover:bg-typegreen/85 px-[12px] py-[6px]">
-                                {reviewer.userStatus}
-                              </Button>
-                              <Button
-                                className="bg-typered hover:bg-typered/85 px-[12px] py-[6px]"
-                                onClick={() => handleDelate(reviewer.id)}
-                              >
-                                <RiDeleteBin6Line className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </>
+          {loading ? (
+            <Loading />
           ) : (
-            <p>Yo&apos;nalishlar mavjud emas</p>
+            <>
+              <h2 className="py-[12px] font-source-serif-pro text-xl font-semibold">
+                Konferensiya yo&apos;nalishlari
+              </h2>
+              {allDirections ? (
+                <>
+                  {currentDirection
+                    ?.filter((d) =>
+                      d.name
+                        ?.toLowerCase()
+                        // .includes(searchTerm.toLowerCase())
+                        .replace(/\s+/g, "")
+                        .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
+                    )
+                    .map((item) => (
+                      <div key={item.id} className="flex flex-col gap-y-1.5">
+                        <div className="flex flex-col">
+                          <div
+                            className={`flex flex-row justify-between items-center p-[12px] border-[1px] rounded-xl border-[#E2DEDE] ${
+                              open === item.id && "border-b-0 rounded-b-none"
+                            }`}
+                          >
+                            <p className="text-lg font-medium">
+                              {highlightSearchTerm(item.name, searchTerm)}
+                            </p>
+                            <Button
+                              className="px-3 py-1.5 bg-typeblue hover:bg-typeblue/85"
+                              onClick={() => toggleClick(item.id)}
+                            >
+                              <MdOutlineKeyboardArrowDown
+                                className={`h-6 w-6 ${
+                                  open === item.id && "rotate-180"
+                                }`}
+                              />
+                              <span>Editors</span>
+                            </Button>
+                          </div>
+                          <div
+                            className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 ${
+                              open === item.id ? "rounded-t-none" : "hidden"
+                            }`}
+                          >
+                            <Button
+                              className="px-[30px] py-[9px] bg-typeyellow hover:bg-typeyellow/85 rounded-xl w-fit"
+                              onClick={onOpenUserAddModal}
+                            >
+                              {" "}
+                              + Muharrir qo&apos;shish
+                            </Button>
+                            {reviewers.map((reviewer) => (
+                              <div
+                                key={reviewer.id}
+                                className="flex items-center justify-between p-[6px] border-[1px] rounded-xl border-[#E2DEDE]"
+                              >
+                                <p className="text-base font-normal p-[6px] w-[200px] overflow-hidden">
+                                  {reviewer.fullName}
+                                </p>
+                                <p className="text-base font-normal p-[6px]">
+                                  {reviewer.phoneNumber}
+                                </p>
+                                <div className="flex items-center gap-x-[30px]">
+                                  <Button className="bg-typegreen hover:bg-typegreen/85 px-[12px] py-[6px]">
+                                    {reviewer.userStatus}
+                                  </Button>
+                                  <Button
+                                    className="bg-typered hover:bg-typered/85 px-[12px] py-[6px]"
+                                    onClick={() => handleDelate(reviewer.id)}
+                                  >
+                                    <RiDeleteBin6Line className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </>
+              ) : (
+                <p>Yo&apos;nalishlar mavjud emas</p>
+              )}
+            </>
           )}
         </div>
         <div className="flex items-center py-4 justify-end">

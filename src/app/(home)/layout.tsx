@@ -1,7 +1,8 @@
 import { ChildProps } from "@/types";
-import React from "react";
+import React, { Suspense } from "react";
 import { LoginModal, RegisterModal } from "@/components/modals";
 import { Footer, Navbar, Partners } from "./home_components";
+import ForgotPasswordModal from "@/components/modals/ForgotPasswordModal";
 
 const HomeLayout = ({ children }: ChildProps) => {
   const items = [
@@ -14,6 +15,7 @@ const HomeLayout = ({ children }: ChildProps) => {
   ];
   return (
     <div className="min-h-screen w-full">
+      <ForgotPasswordModal />
       <RegisterModal />
       <LoginModal />
       <Navbar />

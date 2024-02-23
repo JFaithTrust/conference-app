@@ -8,6 +8,7 @@ import { UserType } from "@/types";
 import { getAllUsers } from "@/fetch_api/fetchUsers";
 import { useRouter } from "next/navigation";
 import CustomPagination from "@/components/ui/CustomPagination";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
@@ -20,6 +21,7 @@ const Users = () => {
   const currentUsers = allUsers.slice(firstUserIndex, lastUsersIndex);
   const [sortByFullName, setSortByFullName] = useState<"asc" | "desc">("asc");
   const [sortByStatus, setSortByStatus] = useState<"asc" | "desc">("asc");
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -27,32 +29,45 @@ const Users = () => {
     const getUsers = async () => {
       const data = await getAllUsers("USER");
       setAllUsers(data);
+      setLoading(false);
     };
     getUsers();
   }, []);
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
-    setAllUsers([...allUsers].sort((a, b) => {
-      const nameA = a.fullName?.toUpperCase();
-      const nameB = b.fullName?.toUpperCase();
-      if (sortByFullName === "asc") {
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      } else {
-        return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
-      }
-    }));
+    setAllUsers(
+      [...allUsers].sort((a, b) => {
+        const nameA = a.fullName?.toUpperCase();
+        const nameB = b.fullName?.toUpperCase();
+        if (sortByFullName === "asc") {
+          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        } else {
+          return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+        }
+      })
+    );
   };
 
   const handleSortByStatus = () => {
     setSortByStatus(sortByStatus === "asc" ? "desc" : "asc");
-    setAllUsers([...allUsers].sort((a, b) => {
-      if (sortByStatus === "asc") {
-        return a.userStatus < b.userStatus ? -1 : a.userStatus > b.userStatus ? 1 : 0;
-      } else {
-        return a.userStatus > b.userStatus ? -1 : a.userStatus < b.userStatus ? 1 : 0;
-      }
-    }));
+    setAllUsers(
+      [...allUsers].sort((a, b) => {
+        if (sortByStatus === "asc") {
+          return a.userStatus < b.userStatus
+            ? -1
+            : a.userStatus > b.userStatus
+            ? 1
+            : 0;
+        } else {
+          return a.userStatus > b.userStatus
+            ? -1
+            : a.userStatus < b.userStatus
+            ? 1
+            : 0;
+        }
+      })
+    );
   };
 
   const highlightSearchTerm = (text: string, term: string) => {
@@ -80,18 +95,28 @@ const Users = () => {
         />
       </div>
       <div className="flex flex-col p-[18px] bg-mainwhite gap-y-1.5 border-[1px] border-solid border-[#DCDBFA] rounded-xl">
-        <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
-          <span className="w-[48px]">Id</span>
-          <div className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer" onClick={handleSortByFullName}>
-            Full Name
-            <ArrowUpDown className="h-4 w-4" />
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
+            <span className="w-[48px]">Id</span>
+            <div
+              className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer"
+              onClick={handleSortByFullName}
+            >
+              Full Name
+              <ArrowUpDown className="h-4 w-4" />
+            </div>
+            <span className="w-[200px]">Phone Number</span>
+            <div
+              className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer"
+              onClick={handleSortByStatus}
+            >
+              Status
+              <ArrowUpDown className="h-4 w-4" />
+            </div>
           </div>
-          <span className="w-[200px]">Phone Number</span>
-          <div className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer" onClick={handleSortByStatus}>
-            Status
-            <ArrowUpDown className="h-4 w-4" />
-          </div>
-        </div>
+        )}
         <div className="flex flex-col gap-y-[9px] w-full">
           {currentUsers
             ?.filter((user) =>

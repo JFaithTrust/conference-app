@@ -22,6 +22,8 @@ import CustomPagination from "../ui/CustomPagination";
 import { putAllUsers } from "@/fetch_api/fetchUsers";
 import axios from "@/fetch_api/axios";
 import { access_token } from "@/fetch_api/token";
+import { toast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
 
 interface UserAddFormProps {
   allUsers: UserType[];
@@ -47,22 +49,30 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
   });
 
   function onSubmit(data: z.infer<typeof userAddSchema>) {
-    const usersIdList: any = [];
-    data.users.forEach((id) => {
-      usersIdList.push({
-        id: id,
+    try {
+      const usersIdList: any = [];
+      data.users.forEach((id) => {
+        usersIdList.push({
+          id: id,
+        });
       });
-    });
-    if(directionId) {
-      axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
+      if (directionId) {
+        axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+      } else {
+        putAllUsers(usersIdList);
+      }
+      userAddModal.onClose();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
       });
-    } else {
-      putAllUsers(usersIdList);
     }
-    userAddModal.onClose();
   }
 
   const body = (

@@ -38,18 +38,22 @@ import { getAllDirections } from "@/fetch_api/fetchDirtection";
 import { Badge } from "@/components/ui/badge";
 import { access_token } from "@/fetch_api/token";
 import axios from "@/fetch_api/axios";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const ConferenceCreate = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [direction, setDirection] = useState<DirectionType[]>([]);
   const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
+  const [loading, seLoading] = useState(true)
+
   const router = useRouter();
 
   useEffect(() => {
     const getDirectionData = async () => {
       const data = await getAllDirections();
       setDirection(data);
+      seLoading(false)
     };
     getDirectionData();
   }, []);
@@ -108,6 +112,10 @@ const ConferenceCreate = () => {
 
   const { isSubmitting } = form.formState;
 
+  if(loading){
+    return <div className="flex items-center justify-center w-full h-[800px]"><Loading /></div>
+  }
+
   return (
     <div className="flex flex-col gap-y-[18px] px-[30px]">
       <Button
@@ -154,9 +162,6 @@ const ConferenceCreate = () => {
                   className="w-full justify-between border-[1px] border-solid border-violet-200 px-3 py-2 text-muted-foreground"
                 >
                   Tanlang
-                  {/* {value
-                    ? direction.find((d) => d.id.toString() === value)?.name
-                    : "IoT texnologiyalari..."} */}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -182,18 +187,6 @@ const ConferenceCreate = () => {
                               currentValue,
                             ]);
                           }
-                          // if (selectedDirections.includes(currentValue)) {
-                          //   setSelectedDirections(
-                          //     selectedDirections.filter(
-                          //       (dir) => dir !== currentValue
-                          //     )
-                          //   );
-                          // } else {
-                          //   setSelectedDirections([
-                          //     ...selectedDirections,
-                          //     currentValue,
-                          //   ]);
-                          // }
                           setValue(currentValue === value ? "" : currentValue);
                           setOpen(false);
                         }}

@@ -1,6 +1,5 @@
 import axios from "./axios";
 import { UserType } from "@/types";
-import { access_token } from "./token";
 
 export const getAllUsers = async (role: string): Promise<UserType[]> => {
   const access_token = localStorage.getItem('access_token');
@@ -41,3 +40,13 @@ export const putAllUsers = async (users: UserType[]) => {
   });
   return data;
 };
+
+export const getUserInfo = async () => {
+  const access_token = localStorage.getItem('access_token');
+  const { data } = await axios.get(`/api/user`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  return data;
+}

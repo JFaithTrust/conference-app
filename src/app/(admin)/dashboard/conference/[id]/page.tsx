@@ -1,11 +1,13 @@
 "use client";
 
+import Loading from "@/app/(home)/home_components/loading/Loading";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { getApplicationByConferenceId } from "@/fetch_api/fetchApplications";
 import { getConferenceById } from "@/fetch_api/fetchConference";
 import { getDirectionByConferenceId } from "@/fetch_api/fetchDirtection";
-import { ConferenceType, DirectionType } from "@/types";
+import { ApplicationType, ConferenceType, DirectionType } from "@/types";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +17,8 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 const ConferenceDetail = ({ params }: { params: { id: number } }) => {
   const [confereceData, setConfereceData] = useState<ConferenceType>();
   const [directions, setDirections] = useState<DirectionType[]>([]);
+  const [applications, setApplications] = useState<ApplicationType[]>([]);
+  const [laoding, setLaoding] = useState(true)
 
   const router = useRouter();
 
@@ -22,11 +26,20 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
     const getConferencesData = async () => {
       const data = await getConferenceById(params.id);
       const directions = await getDirectionByConferenceId(params.id);
+      const application = await getApplicationByConferenceId(params.id);
       setConfereceData(data);
       setDirections(directions);
+      setApplications(application);
+      setLaoding(false)
     };
     getConferencesData();
   }, [params.id]);
+
+  if (laoding) {
+    return <div className="flex items-center justify-center w-full h-[800px]">
+      <Loading />
+    </div>
+  }
 
   return (
     <>
@@ -40,7 +53,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
             <FaArrowLeftLong className="text-white w-6 h-4" />
             Back
           </Button>
-          <div className="flex p-[18px] flex-col gap-y-[18px] bg-mainwhite rounded-xl border-[1px] border-solid border-[#DCDBFA]">
+          <div className="flex p-[18px] flex-col gap-y-[18px] bg-mainwhite rounded-xl border-[1px] border-solid border-[#DEDBFF] mb-10">
             <h2 className="font-semibold font-source-serif-pro text-3xl">
               Konferensiya haqida ma&apos;lumotlar
             </h2>
@@ -134,6 +147,29 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
                 readOnly
               />
             </div>
+            {applications.length > 0 && (
+            <>
+              <p className="text-xl font-semibold">Qabul qilingan maqolalar</p>
+              <div className="flex flex-col gap-y-2">
+                {applications.map((item) => (
+                  <div
+                    className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center"
+                    key={item.id}
+                  >
+                    <h2 className="w-[200px] truncate overflow-hidden">{item.name}</h2>
+                    <h2 className="w-[200px] truncate overflow-hidden">{item.owner?.fullName}</h2>
+                    <h3 className="w-[100px]">{format(item.updatedAt || new Date, "dd-MM-yyyy")}</h3>
+                    <Button
+                      className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85"
+                      onClick={() => router.push(item.thesisFile?.downloadLink || "")}
+                    >
+                      Yuklab olish
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
           </div>
         </div>
       )}

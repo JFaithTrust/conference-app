@@ -5,15 +5,18 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const UserInfo = ({ params }: { params: { id: number } }) => {
   const [userData, setUserData] = useState<any>({});
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const getUserData = async () => {
       const data = await getUserById(params.id);
       setUserData(data);
+      setLoading(false);
     };
     getUserData();
   }, [params.id]);
@@ -31,31 +34,39 @@ const UserInfo = ({ params }: { params: { id: number } }) => {
             Back
           </Button>
           <div className="flex p-[18px] flex-col gap-y-[18px] bg-mainwhite rounded-xl border-[1px] border-solid border-[#DCDBFA]">
-            <h2 className="font-semibold font-source-serif-pro text-3xl">
-              Foydalanuvchi ma&apos;lumotlari
-            </h2>
-            <div className="flex flex-col gap-y-2">
-              <span className="text-sm">FISH : </span>
-              <span>{userData.fullName}</span>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <span className="text-sm">Telefon Nomeri :</span>
-              <span>{userData.phoneNumber}</span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <div className="flex flex-col gap-y-2">
-                <span className="font-normal text-sm">Status</span>
-                <Button className="py-3 px-12 bg-typegreen hover:bg-typegreen/85">
-                  {userData.userStatus}
-                </Button>
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <span className="font-normal text-sm">Foydalanuvchini bloklash</span>
-                <Button className="py-3 px-12" variant={"destructive"}>
-                  Block
-                </Button>
-              </div>
-            </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                <h2 className="font-semibold font-source-serif-pro text-3xl">
+                  Foydalanuvchi ma&apos;lumotlari
+                </h2>
+                <div className="flex flex-col gap-y-2">
+                  <span className="text-sm">FISH : </span>
+                  <span>{userData.fullName}</span>
+                </div>
+                <div className="flex flex-col gap-y-2">
+                  <span className="text-sm">Telefon Nomeri :</span>
+                  <span>{userData.phoneNumber}</span>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <span className="font-normal text-sm">Status</span>
+                    <Button className="py-3 px-12 bg-typegreen hover:bg-typegreen/85">
+                      {userData.userStatus}
+                    </Button>
+                  </div>
+                  <div className="flex flex-col gap-y-2">
+                    <span className="font-normal text-sm">
+                      Foydalanuvchini bloklash
+                    </span>
+                    <Button className="py-3 px-12" variant={"destructive"}>
+                      Block
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

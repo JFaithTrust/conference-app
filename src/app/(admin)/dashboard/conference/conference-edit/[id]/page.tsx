@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/(home)/home_components/loading/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -49,6 +50,8 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
   const [direction, setDirection] = useState<DirectionType[]>([]);
   const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
   const [conferenceData, setConferenceData] = useState<ConferenceType>();
+  const [loading, setLoading] = useState(true)
+
   const router = useRouter();
 
   useEffect(() => {
@@ -73,6 +76,7 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
           new Date(conference.deadlineForThesis)
         );
       }
+      setLoading(false)
     };
     ConferenceData();
   }, [params.id]);
@@ -133,6 +137,10 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
   }
 
   const { isSubmitting } = form.formState;
+
+  if(loading){
+    return <div className="flex items-center justify-center w-full h-[800px]"><Loading /></div>
+  }
 
   return (
     <>

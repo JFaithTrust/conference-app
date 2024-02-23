@@ -8,16 +8,23 @@ import { useEffect, useState } from "react";
 import { ConferenceType } from "@/types";
 import { getAllConferences } from "@/fetch_api/fetchConference";
 import { formatDate } from "@/functions/formats";
+import CarouselSkeleton from "./skeleton/CarouselSkeleton";
 
 const Hero = () => {
   const [heroData, setHeroData] = useState<ConferenceType[]>([]);
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     const getConferences = async () => {
       const res = await getAllConferences();
       setHeroData(res.slice(res.length - 3, res.length));
+      setLoading(false)
     };
     getConferences();
   }, []);
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen w-full"><CarouselSkeleton /></div>; // Render loading state
+  }
 
   const additionData = [
     {

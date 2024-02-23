@@ -7,11 +7,13 @@ import { Conference, Hero } from "./home_components";
 
 export default function Home() {
   const [card, setCard] = useState<ConferenceType[]>([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getConferences = async () => {
       const res = await getAllConferences();
       setCard(res.slice(0, 8));
+      setLoading(false)
     };
     getConferences()
   }, []);
@@ -19,7 +21,7 @@ export default function Home() {
   return (
     <div className="">
       <Hero />
-      <Conference card={card} />
+      <Conference card={card} loading={loading} />
     </div>
   );
 }

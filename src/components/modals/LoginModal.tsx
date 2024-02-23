@@ -17,35 +17,40 @@ import React, { useCallback, useState } from "react";
 import Modal from "../ui/Modal";
 import axios from "@/fetch_api/axios";
 import CustomButton from "../ui/CustomButton";
-import { useRouter } from "next/navigation";
 import { loginSchema } from "@/lib/validation";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "../ui/toast";
+import useForgotPasswordModal from "@/hooks/useForgotPasswordModal";
 
 export default function LoginModal() {
-  const [error, setError] = useState("");
-  const router = useRouter();
 
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
+  const forgotPasswordModal = useForgotPasswordModal();
 
-  const onToggle = useCallback(() => {
+  const onToggleRegister = useCallback(() => {
     loginModal.onClose();
+    forgotPasswordModal.onClose();
     registerModal.onOpen();
-  }, [loginModal, registerModal]);
+  }, [loginModal, registerModal, forgotPasswordModal]);
+
+  const onToggleForgot = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onClose();
+    forgotPasswordModal.onOpen();
+  }, [loginModal, registerModal, forgotPasswordModal]);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phoneNumber: "",
+      phoneNumber: "+998",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
-      const { data } = await axios.post(
-        "/api/auth/login",
-        values
-      );
+      const { data } = await axios.post("/api/auth/login", values);
       if (data.success) {
         loginModal.onClose();
         localStorage.setItem("access_token", data.token);
@@ -53,12 +58,14 @@ export default function LoginModal() {
         const encodedData = userToken?.split(".")[1];
         const { role } = JSON.parse(atob(encodedData || ""));
         localStorage.setItem("role", role);
-        if (role === "SUPER_ADMIN") {
-          router.replace("/dashboard");
-        }
+        window.location.reload();
       }
     } catch (error: any) {
-      console.log(error);
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
     }
   }
 
@@ -85,6 +92,7 @@ export default function LoginModal() {
                     placeholder="Phone Number"
                     {...field}
                     className="w-[400px]"
+                    maxLength={13}
                   />
                 </FormControl>
                 <FormMessage />
@@ -126,7 +134,7 @@ export default function LoginModal() {
         I have not an account
         <span
           className="cursor-pointer underline text-mainindigo hover:no-underline ml-3"
-          onClick={onToggle}
+          onClick={onToggleRegister}
         >
           Create an account
         </span>
@@ -135,7 +143,7 @@ export default function LoginModal() {
         I forget my password
         <span
           className="cursor-pointer underline text-mainindigo hover:no-underline ml-3"
-          onClick={onToggle}
+          onClick={onToggleForgot}
         >
           Create new password
         </span>

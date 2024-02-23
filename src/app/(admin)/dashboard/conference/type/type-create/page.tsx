@@ -23,6 +23,7 @@ import {
 import axios from "@/fetch_api/axios";
 import { access_token } from "@/fetch_api/token";
 import ReviewerAddForm from "@/components/forms/ReviewerAddForm";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const TypeCreate = () => {
   const [allReviewers, setAllReviewers] = useState<UserType[]>([]);
@@ -30,6 +31,7 @@ const TypeCreate = () => {
   const [editorData, setEditorData] = useState<UserType[]>([]);
   // const [deletedItem, setDeletedItem] = useState("");
   const [editedReviewers, setEditedReviewers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const userAddModal = useUserAddModal();
@@ -43,6 +45,7 @@ const TypeCreate = () => {
       const reviewers = await getAllUsers("REVIEWER");
       setAllReviewers(reviewers);
       setEditedReviewers(reviewers);
+      setLoading(false);
     };
     getUsers();
   }, []);
@@ -101,6 +104,14 @@ const TypeCreate = () => {
     } catch (error: any) {
       console.log(error);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full h-[800px]">
+        <Loading />
+      </div>
+    );
   }
 
   return (

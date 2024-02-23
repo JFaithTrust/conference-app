@@ -14,6 +14,7 @@ export interface ConferenceType{
   description?: string;
   address?: string;
   requirements?: string;
+  newApplicationsCount?: number;
   owner?: {
     id: number;
     fullName: string;
@@ -35,6 +36,7 @@ export interface UserType {
 export interface DirectionType {
   id: number;
   name: string;
+  newApplicationsCount?: number;
 }
 
 export interface File {
@@ -47,10 +49,13 @@ export interface ApplicationType {
   name: string;
   description?: string;
   authors?: string;
+  status: "NEW" | "ACCEPTED" | "FEEDBACK" | "REJECTED" | "PENDING";
+  paymentStatus: "PAID" | "UNPAID"
   thesisFile?: File;
   owner: UserType;
   reviewer: UserType;
-  conference?: ConferenceType;
+  conference: ConferenceType;
   direction?: DirectionType;
   createdAt?: string | Date;
+  updatedAt?: Date;
 }

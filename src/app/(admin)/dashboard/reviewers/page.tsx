@@ -10,12 +10,14 @@ import CustomPagination from "@/components/ui/CustomPagination";
 import useUserAddModal from "@/hooks/useUserAddModal";
 import { UserAddForm } from "@/components/forms";
 import { HiOutlinePlus } from "react-icons/hi2";
+import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
   const [allReviewer, setAllReviewer] = useState<UserType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const usersPerPage = 10;
   const lastUsersIndex = currentPage * usersPerPage;
@@ -37,6 +39,7 @@ const Users = () => {
         const users = await getAllUsers("USER");
         setAllReviewer(reviewers);
         setAllUsers(users);
+        setLoading(false);
       };
       getUsers();
     } catch (error) {
@@ -113,55 +116,63 @@ const Users = () => {
         />
       </div>
       <div className="flex flex-col p-[18px] bg-mainwhite gap-y-1.5 border-[1px] border-solid border-[#DCDBFA] rounded-xl">
-        <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
-          <span className="w-[48px]">Id</span>
-          <div
-            className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer"
-            onClick={handleSortByFullName}
-          >
-            Full Name
-            <ArrowUpDown className="h-4 w-4" />
-          </div>
-          <span className="w-[200px]">Phone Number</span>
-          <div
-            className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer"
-            onClick={handleSortByStatus}
-          >
-            Status
-            <ArrowUpDown className="h-4 w-4" />
-          </div>
-        </div>
-        <div className="flex flex-col gap-y-[9px] w-full">
-          {currentUsers
-            ?.filter((user) =>
-              user.fullName
-                ?.toLowerCase()
-                // .includes(searchTerm.toLowerCase())
-                .replace(/\s+/g, "")
-                .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
-            )
-            .map((user) => (
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className="flex flex-row p-3 items-center w-full justify-between text-lg font-medium">
+              <span className="w-[48px]">Id</span>
               <div
-                key={user.id}
-                className={
-                  "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
-                }
+                className="flex flex-row gap-x-1 items-center w-[350px] cursor-pointer"
+                onClick={handleSortByFullName}
               >
-                <span className="w-[48px]">{user.id}</span>
-                <span className="w-[350px] text-start">
-                  {highlightSearchTerm(user.fullName, searchTerm)}
-                </span>
-                <span className="w-[200px]">{user.phoneNumber}</span>
-                <Button
-                  className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 ${
-                    user.userStatus === "ACTIVE" ? "bg-typegreen" : "bg-typered"
-                  }`}
-                >
-                  {user.userStatus}
-                </Button>
+                Full Name
+                <ArrowUpDown className="h-4 w-4" />
               </div>
-            ))}
-        </div>
+              <span className="w-[200px]">Phone Number</span>
+              <div
+                className="flex flex-row gap-x-1 items-center w-[75px] cursor-pointer"
+                onClick={handleSortByStatus}
+              >
+                Status
+                <ArrowUpDown className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-y-[9px] w-full">
+              {currentUsers
+                ?.filter((user) =>
+                  user.fullName
+                    ?.toLowerCase()
+                    // .includes(searchTerm.toLowerCase())
+                    .replace(/\s+/g, "")
+                    .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
+                )
+                .map((user) => (
+                  <div
+                    key={user.id}
+                    className={
+                      "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
+                    }
+                  >
+                    <span className="w-[48px]">{user.id}</span>
+                    <span className="w-[350px] text-start">
+                      {highlightSearchTerm(user.fullName, searchTerm)}
+                    </span>
+                    <span className="w-[200px]">{user.phoneNumber}</span>
+                    <Button
+                      className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 ${
+                        user.userStatus === "ACTIVE"
+                          ? "bg-typegreen"
+                          : "bg-typered"
+                      }`}
+                    >
+                      {user.userStatus}
+                    </Button>
+                  </div>
+                ))}
+            </div>
+          </>
+        )}
       </div>
       <div className="flex items-center py-4 justify-end">
         {allReviewer.length > usersPerPage && (

@@ -1,6 +1,6 @@
+import Image from "next/image";
 import React from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
-
 
 const Topbar = () => {
   return (
@@ -8,10 +8,12 @@ const Topbar = () => {
       <h2 className="font-medium">Name of Conference</h2>
       <div className="flex flex-row gap-4 items-center">
         <div className="flex flex-row items-center justify-center gap-[12px]">
-          <img
-            className="relative w-5 h-4 overflow-hidden shrink-0 object-cover"
+          <Image
+            className="relative overflow-hidden shrink-0 object-cover"
             alt=""
             src="/icons/flag.svg"
+            width={20}
+            height={16}
           />
           <span className="font-medium">Uzbek</span>
         </div>
