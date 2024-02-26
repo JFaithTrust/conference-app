@@ -87,7 +87,7 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
       description: "",
       requirements: "",
       address: "",
-      cost: "50 000 so'm",
+      cost: "",
     },
   });
 
@@ -441,10 +441,9 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
                         <FormLabel>To&apos;lov</FormLabel>
                         <FormControl>
                           <Input
-                            readOnly
-                            value={"50 000 so'm"}
                             className="border-[1px] border-solid border-violet-200"
-                            // {...field}
+                            placeholder="50 000 so'm"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />

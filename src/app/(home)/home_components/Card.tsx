@@ -35,7 +35,7 @@ const Card = ({ item, loading }: Props) => {
       </div>
       <div className="self-stretch flex flex-col items-start justify-center p-[5px] gap-[12px] text-center">
         <b className="self-stretch relative leading-[120%]">{item.name}</b>
-        <div className="self-stretch relative text-sm leading-[120%] text-justify">
+        <div className="self-stretch relative text-sm leading-[120%] text-justify line-clamp-6 text-ellipsis overflow-hidden">
           {item.description}
         </div>
       </div>

@@ -53,6 +53,8 @@ export const putApplicationByUserId = async (
       },
     }
   );
+
+  return data;
 };
 
 export const getApplicationByCurrentUser = async (): Promise<

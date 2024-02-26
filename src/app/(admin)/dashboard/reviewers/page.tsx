@@ -138,39 +138,45 @@ const Users = () => {
                 <ArrowUpDown className="h-4 w-4" />
               </div>
             </div>
-            <div className="flex flex-col gap-y-[9px] w-full">
-              {currentUsers
-                ?.filter((user) =>
-                  user.fullName
-                    ?.toLowerCase()
-                    // .includes(searchTerm.toLowerCase())
-                    .replace(/\s+/g, "")
-                    .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
-                )
-                .map((user) => (
-                  <div
-                    key={user.id}
-                    className={
-                      "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
-                    }
-                  >
-                    <span className="w-[48px]">{user.id}</span>
-                    <span className="w-[350px] text-start">
-                      {highlightSearchTerm(user.fullName, searchTerm)}
-                    </span>
-                    <span className="w-[200px]">{user.phoneNumber}</span>
-                    <Button
-                      className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 ${
-                        user.userStatus === "ACTIVE"
-                          ? "bg-typegreen"
-                          : "bg-typered"
-                      }`}
+            {currentUsers.length > 0 ? (
+              <div className="flex flex-col gap-y-[9px] w-full">
+                {currentUsers
+                  ?.filter((user) =>
+                    user.fullName
+                      ?.toLowerCase()
+                      // .includes(searchTerm.toLowerCase())
+                      .replace(/\s+/g, "")
+                      .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
+                  )
+                  .map((user) => (
+                    <div
+                      key={user.id}
+                      className={
+                        "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
+                      }
                     >
-                      {user.userStatus}
-                    </Button>
-                  </div>
-                ))}
-            </div>
+                      <span className="w-[48px]">{user.id}</span>
+                      <span className="w-[350px] text-start">
+                        {highlightSearchTerm(user.fullName, searchTerm)}
+                      </span>
+                      <span className="w-[200px]">{user.phoneNumber}</span>
+                      <Button
+                        className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 ${
+                          user.userStatus === "ACTIVE"
+                            ? "bg-typegreen"
+                            : "bg-typered"
+                        }`}
+                      >
+                        {user.userStatus}
+                      </Button>
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div className="w-full flex items-center justify-center h-[200px] text-xl font-semibold font-source-serif-pro text-muted-foreground border border-solid rounded-xl">
+                Muharrirlar mavjud emas!
+              </div>
+            )}
           </>
         )}
       </div>

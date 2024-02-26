@@ -129,7 +129,7 @@ const ConferenceType = () => {
               <h2 className="py-[12px] font-source-serif-pro text-xl font-semibold">
                 Konferensiya yo&apos;nalishlari
               </h2>
-              {allDirections ? (
+              {allDirections.length > 0 ? (
                 <>
                   {currentDirection
                     ?.filter((d) =>
@@ -204,7 +204,9 @@ const ConferenceType = () => {
                     ))}
                 </>
               ) : (
-                <p>Yo&apos;nalishlar mavjud emas</p>
+                <div className="w-full flex items-center justify-center h-[200px] text-xl font-semibold font-source-serif-pro text-muted-foreground border border-solid rounded-xl">
+                  Konferensiya yo&apos;nalishlari mavjud emas!
+                </div>
               )}
             </>
           )}

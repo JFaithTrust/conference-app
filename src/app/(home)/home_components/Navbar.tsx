@@ -15,7 +15,6 @@ import {
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import axios from "@/fetch_api/axios";
 import { UserType } from "@/types";
 import { getUserInfo } from "@/fetch_api/fetchUsers";
 
@@ -61,9 +60,17 @@ const Navbar = () => {
         <div className="flex-1 rounded bg-mainwhite shadow-[0px_0px_4px_1px_#dcdbfa] overflow-hidden flex flex-row items-center justify-between py-3.5 px-[18px]">
           <Link
             href={"/"}
-            className="rounded box-border h-[42px] overflow-hidden flex flex-row items-center justify-center py-0.5 px-3.5 text-mainindigo border-[2px] border-solid border-mainindigo"
+            className="box-border overflow-hidden flex flex-row items-center justify-center px-3.5"
           >
-            <div className="relative leading-[100%] font-medium">Logo</div>
+            <div className="relative leading-[100%] font-medium">
+              <Image
+                className="relative overflow-hidden shrink-0 object-cover"
+                alt=""
+                width={50}
+                height={50}
+                src="/images/image_1.png"
+              />
+            </div>
           </Link>
           <div className="flex flex-row items-center justify-center gap-[48px] text-xl">
             <div className="flex flex-row items-center justify-start">

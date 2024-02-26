@@ -18,7 +18,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
   const [confereceData, setConfereceData] = useState<ConferenceType>();
   const [directions, setDirections] = useState<DirectionType[]>([]);
   const [applications, setApplications] = useState<ApplicationType[]>([]);
-  const [laoding, setLaoding] = useState(true)
+  const [laoding, setLaoding] = useState(true);
 
   const router = useRouter();
 
@@ -30,15 +30,17 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
       setConfereceData(data);
       setDirections(directions);
       setApplications(application);
-      setLaoding(false)
+      setLaoding(false);
     };
     getConferencesData();
   }, [params.id]);
 
   if (laoding) {
-    return <div className="flex items-center justify-center w-full h-[800px]">
-      <Loading />
-    </div>
+    return (
+      <div className="flex items-center justify-center w-full h-[800px]">
+        <Loading />
+      </div>
+    );
   }
 
   return (
@@ -68,10 +70,13 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
                 Yo&apos;nalishlar :{" "}
               </span>
               <ul className="flex flex-col gap-y-1 list-disc pl-5">
-                {directions &&
+                {directions ? (
                   directions.map((direction) => (
                     <li key={direction.id}>{direction?.name}</li>
-                  ))}
+                  ))
+                ) : (
+                  <li>Yo&apos;nalishlar topilmadi</li>
+                )}
               </ul>
             </div>
             <div className="flex flex-col gap-y-2">
@@ -122,7 +127,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
                 </span>
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
                   <Button className="rounded-lg p-3 bg-white text-black border-[1px] border-solid hover:bg-slate-50 border-violet-200">
-                    <span>{confereceData.cost}</span>
+                    <span>{confereceData.cost} so&apos;m</span>
                   </Button>
                 </div>
               </div>
@@ -148,28 +153,38 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
               />
             </div>
             {applications.length > 0 && (
-            <>
-              <p className="text-xl font-semibold">Qabul qilingan maqolalar</p>
-              <div className="flex flex-col gap-y-2">
-                {applications.map((item) => (
-                  <div
-                    className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center"
-                    key={item.id}
-                  >
-                    <h2 className="w-[200px] truncate overflow-hidden">{item.name}</h2>
-                    <h2 className="w-[200px] truncate overflow-hidden">{item.owner?.fullName}</h2>
-                    <h3 className="w-[100px]">{format(item.updatedAt || new Date, "dd-MM-yyyy")}</h3>
-                    <Button
-                      className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85"
-                      onClick={() => router.push(item.thesisFile?.downloadLink || "")}
+              <>
+                <p className="text-xl font-semibold">
+                  Qabul qilingan maqolalar
+                </p>
+                <div className="flex flex-col gap-y-2">
+                  {applications.map((item) => (
+                    <div
+                      className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center"
+                      key={item.id}
                     >
-                      Yuklab olish
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+                      <h2 className="w-[200px] truncate overflow-hidden">
+                        {item.name}
+                      </h2>
+                      <h2 className="w-[200px] truncate overflow-hidden">
+                        {item.owner?.fullName}
+                      </h2>
+                      <h3 className="w-[100px]">
+                        {format(item.updatedAt || new Date(), "dd-MM-yyyy")}
+                      </h3>
+                      <Button
+                        className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85"
+                        onClick={() =>
+                          router.push(item.thesisFile?.downloadLink || "")
+                        }
+                      >
+                        Yuklab olish
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

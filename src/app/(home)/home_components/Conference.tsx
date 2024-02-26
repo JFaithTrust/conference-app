@@ -30,7 +30,7 @@ const Conference: FC<CardProps> = ({ card, loading }) => {
           KONFERENSIYALAR
         </div>
       </div>
-      <div className="self-stretch grid gap-y-6 gap-x-10 grid-cols-4">
+      <div className="grid gap-y-6 gap-x-8 grid-cols-4">
         {currentPosts.map((item, index) => (
           <Card item={item} key={index} loading={loading} />
         ))}

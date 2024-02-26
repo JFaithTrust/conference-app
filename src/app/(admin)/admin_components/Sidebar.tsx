@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaFileExport, FaHome, FaRegUser } from "react-icons/fa";
 import { ImUserTie } from "react-icons/im";
 import { HiOutlineUserGroup } from "react-icons/hi2";
@@ -19,6 +19,7 @@ const Sidebar = () => {
   const [isOpenConf, setIsOpenConf] = useState(false);
   const [isOpenArt, setIsOpenArt] = useState(false);
 
+  const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const Sidebar = () => {
 
   return (
     <div className="w-[280px] min-h-screen py-[18px] px-[32px] flex flex-col gap-y-[18px]">
-      <div className="p-[12px]">
+      <div className="p-[12px] cursor-pointer" onClick={() => {router.push("/")}}>
         <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-tr from-[#3EBD80] to-[#3EFEA1]">
           Conference-List
         </h2>

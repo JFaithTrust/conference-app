@@ -24,10 +24,12 @@ import axios from "@/fetch_api/axios";
 import { access_token } from "@/fetch_api/token";
 import ReviewerAddForm from "@/components/forms/ReviewerAddForm";
 import Loading from "@/app/(home)/home_components/loading/Loading";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 
 const TypeCreate = () => {
   const [allReviewers, setAllReviewers] = useState<UserType[]>([]);
-  const [reviewersId, setReviewersId] = useState([""]);
+  const [reviewersId, setReviewersId] = useState([] as string[]);
   const [editorData, setEditorData] = useState<UserType[]>([]);
   // const [deletedItem, setDeletedItem] = useState("");
   const [editedReviewers, setEditedReviewers] = useState<UserType[]>([]);
@@ -85,24 +87,47 @@ const TypeCreate = () => {
         },
       });
       const data = response.data;
-
-      const usersIdList: any[] = [];
-      reviewersId.forEach((id) => {
-        usersIdList.push({
-          id: id,
+      if (data) {
+        toast({
+          title: "Yo'nalish muvaffaqiyatli yaratildi",
+          variant: "default",
         });
-      });
+      }
 
-      await axios.put(`/api/direction/addReviewer/${data.id}`, usersIdList, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
+      if (reviewersId.length !== 0) {
+        const usersIdList: any[] = [];
+        reviewersId.forEach((id) => {
+          usersIdList.push({
+            id: id,
+          });
+        });
 
-      setEditorData([]);
+        const res = await axios.put(
+          `/api/direction/addReviewer/${data.id}`,
+          usersIdList,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+
+        if (res.data) {
+          toast({
+            title: "Yo'nalish muvaffaqiyatli qo'shildi",
+            variant: "default",
+          });
+        }
+
+        setEditorData([]);
+      }
       form.reset();
     } catch (error: any) {
-      console.log(error);
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
     }
   }
 

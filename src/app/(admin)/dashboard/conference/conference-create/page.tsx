@@ -39,13 +39,15 @@ import { Badge } from "@/components/ui/badge";
 import { access_token } from "@/fetch_api/token";
 import axios from "@/fetch_api/axios";
 import Loading from "@/app/(home)/home_components/loading/Loading";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 
 const ConferenceCreate = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [direction, setDirection] = useState<DirectionType[]>([]);
   const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
-  const [loading, seLoading] = useState(true)
+  const [loading, seLoading] = useState(true);
 
   const router = useRouter();
 
@@ -53,7 +55,7 @@ const ConferenceCreate = () => {
     const getDirectionData = async () => {
       const data = await getAllDirections();
       setDirection(data);
-      seLoading(false)
+      seLoading(false);
     };
     getDirectionData();
   }, []);
@@ -64,7 +66,7 @@ const ConferenceCreate = () => {
       description: "",
       requirements: "",
       address: "",
-      cost: "50 000 so'm",
+      cost: "",
     },
   });
 
@@ -87,33 +89,57 @@ const ConferenceCreate = () => {
       });
 
       const data = response.data;
-      const directionsIdList: any = [];
-      direction.filter((item) => {
-        if (selectedDirections.includes(item.name.toLowerCase())) {
-          directionsIdList.push({
-            id: item.id,
-          });
-        }
-      });
 
-      await axios.put(
-        `/api/conference/editDirections/${data.id}`,
-        directionsIdList,
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
+      if (data) {
+        toast({
+          title: "Konferensiya muvaffaqiyatli yaratildi",
+          variant: "default",
+        });
+      }
+
+      if (selectedDirections.length > 0) {
+        const directionsIdList: any = [];
+        direction.filter((item) => {
+          if (selectedDirections.includes(item.name.toLowerCase())) {
+            directionsIdList.push({
+              id: item.id,
+            });
+          }
+        });
+
+        const res = await axios.put(
+          `/api/conference/editDirections/${data.id}`,
+          directionsIdList,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        toast({
+          title: "Konferensiya muvaffaqiyatli yaratildi",
+          variant: "default",
+        });
+        setSelectedDirections([]);
+      }
+      form.reset();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
     }
   }
 
   const { isSubmitting } = form.formState;
 
-  if(loading){
-    return <div className="flex items-center justify-center w-full h-[800px]"><Loading /></div>
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full h-[800px]">
+        <Loading />
+      </div>
+    );
   }
 
   return (
@@ -129,7 +155,7 @@ const ConferenceCreate = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex p-[18px] flex-col gap-y-[18px] bg-mainwhite rounded-xl border-[1px] border-solid border-[#DCDBFA]"
+          className="flex p-[18px] flex-col gap-y-[18px] bg-mainwhite rounded-xl border-[1px] border-solid border-[#DCDBFA] mb-10"
         >
           <h2 className="font-semibold font-source-serif-pro text-3xl">
             Yangi konferensiya yaratish
@@ -406,22 +432,15 @@ const ConferenceCreate = () => {
                     <FormLabel>To&apos;lov</FormLabel>
                     <FormControl>
                       <Input
-                        readOnly
-                        value={"50 000 so'm"}
                         className="border-[1px] border-solid border-violet-200"
-                        // {...field}
+                        placeholder="50 000"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* <span className="font-normal">Payment</span>
-              <div className="flex flex-row justify-between items-center w-full gap-x-3">
-                <Button className="rounded-lg p-3 bg-mainwhite hover:bg-mainwhite text-black">
-                  <span>50 000 so&apos;m</span>
-                </Button>
-              </div> */}
             </div>
           </div>
           <div className="flex justify-end">

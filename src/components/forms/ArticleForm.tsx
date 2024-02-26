@@ -37,6 +37,8 @@ import axios from "@/fetch_api/axios";
 import { access_token } from "@/fetch_api/token";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { ToastAction } from "../ui/toast";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   name: string;
@@ -45,7 +47,6 @@ interface Props {
 }
 
 const ArticleForm = ({ name, id, direction }: Props) => {
-  const [error, setError] = useState("");
   const [imageId, setimageId] = useState();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -104,10 +105,19 @@ const ArticleForm = ({ name, id, direction }: Props) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        if (res) {
+          toast({
+            title: "Maqola muvaffaqiyatli yuborildi",
+            variant: "default",
+          });
+        }
       })
       .catch((err) => {
-        setError(err.response.data.message);
+        toast({
+          title: err?.response?.data?.message,
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
       });
 
     form.reset();

@@ -57,11 +57,18 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
         });
       });
       if (directionId) {
-        axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
+        const { data } : any = axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         });
+
+        if (data) {
+          toast({
+            title: "Muvaffaqiyatli saqlandi",
+            variant: "default",
+          });
+        }
       } else {
         putAllUsers(usersIdList);
       }

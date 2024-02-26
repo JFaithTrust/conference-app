@@ -138,81 +138,89 @@ const Conference = () => {
                 <span className="w-[150px]">Registratsiya v.</span>
                 <span className={`w-[130px] text-center`}>Harakat</span>
               </div>
-              <div className="flex flex-col gap-y-[9px] w-full">
-                {currentConferences
-                  ?.filter((conf) =>
-                    conf.name
-                      ?.toLowerCase()
-                      // .includes(searchTerm.toLowerCase())
-                      .replace(/\s+/g, "")
-                      .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
-                  )
-                  .map((conf) => (
-                    <div
-                      key={conf.id}
-                      className={
-                        "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
-                      }
-                    >
-                      <span className="w-[48px]">{conf.id}</span>
-                      <span className="w-[350px] text-start overflow-hidden truncate">
-                        {highlightSearchTerm(conf.name, searchTerm)}
-                      </span>
-                      <span className="w-[150px]">
-                        {format(conf.startsAt, "dd-MM-yyyy")}
-                      </span>
-                      <span className="w-[150px]">
-                        {format(conf.endsAt, "dd-MM-yyyy")}
-                      </span>
-                      <span className="w-[150px]">
-                        {format(conf.deadlineForThesis, "dd-MM-yyyy")}
-                      </span>
+              {currentConferences.length > 0 ? (
+                <div className="flex flex-col gap-y-[9px] w-full">
+                  {currentConferences
+                    ?.filter((conf) =>
+                      conf.name
+                        ?.toLowerCase()
+                        // .includes(searchTerm.toLowerCase())
+                        .replace(/\s+/g, "")
+                        .includes(searchTerm.toLowerCase().replace(/\s+/g, ""))
+                    )
+                    .map((conf) => (
                       <div
-                        className={`lowercase flex flex-row w-[130px] gap-x-2 items-center ${
-                          userRole !== "SUPER_ADMIN" ? "justify-center" : "justify-start"
-                        }`}
+                        key={conf.id}
+                        className={
+                          "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
+                        }
                       >
-                        <Button
-                          variant="ghost"
-                          size={"icon"}
-                          className="px-0"
-                          onClick={() =>
-                            router.push(`/dashboard/conference/${conf.id}`)
-                          }
+                        <span className="w-[48px]">{conf.id}</span>
+                        <span className="w-[350px] text-start overflow-hidden truncate">
+                          {highlightSearchTerm(conf.name, searchTerm)}
+                        </span>
+                        <span className="w-[150px]">
+                          {format(conf.startsAt, "dd-MM-yyyy")}
+                        </span>
+                        <span className="w-[150px]">
+                          {format(conf.endsAt, "dd-MM-yyyy")}
+                        </span>
+                        <span className="w-[150px]">
+                          {format(conf.deadlineForThesis, "dd-MM-yyyy")}
+                        </span>
+                        <div
+                          className={`lowercase flex flex-row w-[130px] gap-x-2 items-center ${
+                            userRole !== "SUPER_ADMIN"
+                              ? "justify-center"
+                              : "justify-start"
+                          }`}
                         >
-                          <FaEye size={22} className="text-typeblue" />
-                        </Button>
-                        {userRole === "SUPER_ADMIN" && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size={"icon"}
-                              className="px-0"
-                              onClick={() =>
-                                router.push(
-                                  `/dashboard/conference/conference-edit/${conf.id}`
-                                )
-                              }
-                            >
-                              <FaEdit size={20} className="text-typeyellow" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size={"icon"}
-                              className="px-0"
-                              onClick={() => handeleDelete(conf.id)}
-                            >
-                              <AiFillDelete
-                                size={20}
-                                className="text-typered"
-                              />
-                            </Button>
-                          </>
-                        )}
+                          <Button
+                            variant="ghost"
+                            size={"icon"}
+                            className="px-0"
+                            onClick={() =>
+                              router.push(`/dashboard/conference/${conf.id}`)
+                            }
+                          >
+                            <FaEye size={22} className="text-typeblue" />
+                          </Button>
+                          {userRole === "SUPER_ADMIN" && (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size={"icon"}
+                                className="px-0"
+                                onClick={() =>
+                                  router.push(
+                                    `/dashboard/conference/conference-edit/${conf.id}`
+                                  )
+                                }
+                              >
+                                <FaEdit size={20} className="text-typeyellow" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size={"icon"}
+                                className="px-0"
+                                onClick={() => handeleDelete(conf.id)}
+                              >
+                                <AiFillDelete
+                                  size={20}
+                                  className="text-typered"
+                                />
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-              </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="w-full flex items-center justify-center h-[200px] text-xl font-semibold font-source-serif-pro text-muted-foreground border border-solid rounded-xl">
+                  Konferensiyalar mavjud emas!
+                </div>
+              )}
             </>
           )}
         </div>

@@ -114,7 +114,13 @@ const NewArticles = () => {
           });
         });
 
-        await putApplicationByUserId(revierwerId as number, apps);
+        const res = await putApplicationByUserId(revierwerId as number, apps);
+        if (res) {
+          toast({
+            title: "Maqolalar muvaffaqiyatli jo'natildi!",
+            variant: "default",
+          });
+        }
       };
       putApplicationUserId();
       //reset all values
