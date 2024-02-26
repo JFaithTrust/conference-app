@@ -7,13 +7,13 @@ import { getAllConferences } from "@/fetch_api/fetchConference";
 
 const Conferences = () => {
   const [card, setCard] = useState<ConferenceType[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getConferences = async () => {
       const res = await getAllConferences();
       setCard(res)
-      setLoading(true)
+      setLoading(false)
     };
     getConferences();
   }, []);
