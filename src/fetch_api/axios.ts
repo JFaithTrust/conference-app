@@ -10,7 +10,7 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "ngrok-skip-browser-warning" : "any"
-  }
+  },
 });
 
 export default axiosInstance;
