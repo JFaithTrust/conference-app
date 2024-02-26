@@ -13,4 +13,21 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
+axiosInstance.interceptors.request.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if(error.response.status === 401){
+      logoutUser()
+    }
+    return Promise.reject(error);
+  }
+);
+
+const logoutUser = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/";
+};
+
 export default axiosInstance;
