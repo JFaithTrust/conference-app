@@ -70,6 +70,7 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
           });
         }
       } else {
+        // for make user editor
         putAllUsers(usersIdList);
       }
       userAddModal.onClose();

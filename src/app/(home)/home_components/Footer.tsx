@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const Footer = () => {
@@ -5,17 +6,22 @@ const Footer = () => {
     <div className="bg-mainindigo w-full flex flex-row items-start justify-between py-[50px] px-[120px] box-border text-5xl text-herowhite font-regular">
       <div className="h-[328px] shrink-0 flex flex-col items-start justify-between text-white">
         <div className="shrink-0 flex flex-col items-start justify-start gap-[32px]">
-          <div className="rounded-xl bg-gray-100 shrink-0 flex flex-row items-start justify-start p-[52px] border-[1px] border-stone-50 bg-opacity-15">
-            <b className="relative text-xl">
+          <div className="rounded-xl bg-gray-100 shrink-0 flex flex-row items-start justify-start p-[42px] border-[1px] border-stone-50 bg-opacity-15">
+            <Image
+              src={"/images/image_1.png"}
+              height={100}
+              width={100}
+              alt="Logo"
+            />
+            {/* <b className="relative text-xl">
               <span>LO</span>
               <span className="text-typegreen">GO</span>
               <span>.</span>
-            </b>
+            </b> */}
           </div>
           <b className="relative text-xl">
-            <span>{`SIZNING `}</span>
-            <span className="text-typegreen">{`BRANDINGIZ `}</span>
-            <span>NOMI</span>
+            <span>{`CONFERENCE `}</span>
+            <span className="text-typegreen">{`UZ `}</span>
           </b>
         </div>
         <div className="relative text-base inline-block w-[404px]">
@@ -35,7 +41,6 @@ const Footer = () => {
           <div className="relative">BIZ NILAN ALOQA</div>
           <div className="relative">PROFILE</div>
         </div>
-        <div className="relative">{`PRIVACY & COOKIE POLICY`}</div>
       </div>
       <div className="w-[220px] flex flex-col items-start justify-start gap-[70px]">
         <div className="relative font-semibold text-xl">ALOQA</div>
@@ -69,36 +74,39 @@ const Footer = () => {
           </div>
         </div>
         <ul className="self-stretch flex flex-row items-center justify-center gap-[30px]">
-            <li>
-              <img
-                className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
-                alt=""
-                src="/icons/twitter.svg"
-              />
-            </li>
-            <li>
-              <img
-                className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
-                alt=""
-                src="/icons/instagram.svg"
-              />
-            </li>
-            <li>
-              <img
-                className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
-                alt=""
-                src="/icons/telegram.svg"
-              />
-            </li>
+          <li>
+            <img
+              className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
+              alt=""
+              src="/icons/twitter.svg"
+            />
+          </li>
+          <li>
+            <img
+              className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
+              alt=""
+              src="/icons/instagram.svg"
+            />
+          </li>
+          <li>
+            <img
+              className="relative w-11 h-11 overflow-hidden shrink-0 object-cover"
+              alt=""
+              src="/icons/telegram.svg"
+            />
+          </li>
         </ul>
       </div>
       <div className="w-56 flex flex-col items-start justify-start gap-[70px]">
         <div className="relative font-semibold text-xl">XARITADA</div>
-        <img
-          className="self-stretch relative max-w-full overflow-hidden h-[214px] shrink-0 object-cover"
-          alt=""
-          src="/images/map.jpg"
-        />
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2997.4303920424!2d69.23749847646144!3d41.29949980144142!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b8a0bfe27d9%3A0x29bcda9dd27c336a!2sTATU!5e0!3m2!1sru!2s!4v1709046689629!5m2!1sru!2s"
+          height="214"
+          allowFullScreen={true}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="self-stretch relative max-w-full overflow-hidden shrink-0 object-cover"
+        ></iframe>
       </div>
     </div>
   );

@@ -11,23 +11,26 @@ const axiosInstance: AxiosInstance = axios.create({
   headers: {
     "ngrok-skip-browser-warning" : "any"
   },
+  
 });
 
+const logoutUser = () => {
+  window.localStorage.removeItem("access_token");
+  window.location.href = "/";
+};
+
 axiosInstance.interceptors.request.use(
-  (response) => {
-    return response;
+  (reponse) => {
+    console.log(reponse.data);
+    return reponse;
   },
   (error) => {
-    if(error.response.status === 401){
+    console.log('error result');
+    if(error){
       logoutUser()
     }
     return Promise.reject(error);
   }
 );
-
-const logoutUser = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/";
-};
 
 export default axiosInstance;

@@ -56,6 +56,25 @@ const ArticleForm = ({ name, id, direction }: Props) => {
   const handleFileChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
     const file: File = (target.files as FileList)[0];
+
+    // Validate file type and size
+    const allowedTypes = ["application/pdf"]; // Add allowed file types
+    const maxSize = 10 * 1024 * 1024; // 10MB maximum file size
+
+    if (!allowedTypes.includes(file.type)) {
+      return toast({
+        title: "Fayl turi noto'g'ri! Iltimos pdf formatda yuklang.",
+        variant: "destructive",
+      });
+    }
+
+    if (file.size > maxSize) {
+      return toast({
+        title: "Fayl hajmi 10MB dan oshmasligi kerak!",
+        variant: "destructive",
+      });
+    }
+
     setSelectedFile(file.name);
     const formData = new FormData();
     formData.append("file", file);
@@ -90,39 +109,48 @@ const ArticleForm = ({ name, id, direction }: Props) => {
   });
 
   function onSubmit(values: z.infer<typeof createPostSchema>) {
-    const application = {
-      name: values.name,
-      authors: values.authors,
-      description: values.description,
-      thesisFile: { id: imageId },
-      direction: { id: value },
-      conference: { id: id },
-    };
-    axios
-      .post("/api/application", application, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-      .then((res) => {
-        if (res) {
+    if (imageId) {
+      const application = {
+        name: values.name,
+        authors: values.authors,
+        description: values.description,
+        thesisFile: { id: imageId },
+        direction: { id: value },
+        conference: { id: id },
+      };
+      axios
+        .post("/api/application", application, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        })
+        .then((res) => {
+          if (res) {
+            toast({
+              title: "Maqola muvaffaqiyatli yuborildi",
+              variant: "default",
+            });
+          }
+        })
+        .catch((err) => {
           toast({
-            title: "Maqola muvaffaqiyatli yuborildi",
-            variant: "default",
+            title: err?.response?.data?.message,
+            variant: "destructive",
+            action: (
+              <ToastAction altText="Try again">Qayta urinish</ToastAction>
+            ),
           });
-        }
-      })
-      .catch((err) => {
-        toast({
-          title: err?.response?.data?.message,
-          variant: "destructive",
-          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
         });
-      });
 
-    form.reset();
-    setSelectedFile("");
-    setValue("");
+      form.reset();
+      setSelectedFile("");
+      setValue("");
+    } else {
+      toast({
+        title: "Fayl tanlanmadi",
+        variant: "destructive",
+      });
+    }
   }
 
   const { isSubmitting } = form.formState;

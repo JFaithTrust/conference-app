@@ -12,7 +12,7 @@ import { UserAddForm } from "@/components/forms";
 import { HiOutlinePlus } from "react-icons/hi2";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 
-const Users = () => {
+const Reviewers = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
   const [allReviewer, setAllReviewer] = useState<UserType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +45,26 @@ const Users = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [allReviewer]);
+  }, []);
+
+  useEffect(() => {
+    window.setTimeout(() => {
+      if(userAddModal.isOpen === true) {
+        const getUsers = async () => {
+          const users = await getAllUsers("USER");
+          setAllUsers(users);
+        };
+        getUsers();
+      }else{
+        const getUsers = async () => {
+          const reviewers = await getAllUsers("REVIEWER");
+          setAllReviewer(reviewers);
+        };
+        getUsers();
+      }
+    }, 500);
+  }, [userAddModal.isOpen])
+  
 
   const handleSortByFullName = () => {
     setSortByFullName(sortByFullName === "asc" ? "desc" : "asc");
@@ -194,4 +213,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Reviewers;

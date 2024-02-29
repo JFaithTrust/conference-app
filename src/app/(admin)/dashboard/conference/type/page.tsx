@@ -12,13 +12,19 @@ import { DirectionType, UserType } from "@/types";
 import { getAllUsers, getUserByDirectionId } from "@/fetch_api/fetchUsers";
 import { UserAddForm } from "@/components/forms";
 import useUserAddModal from "@/hooks/useUserAddModal";
-import axios from "@/fetch_api/axios";
-import { access_token } from "@/fetch_api/token";
 import CustomPagination from "@/components/ui/CustomPagination";
 import Loading from "@/app/(home)/home_components/loading/Loading";
+import { AiFillDelete } from "react-icons/ai";
+import { FaEdit } from "react-icons/fa";
+import { Label } from "@/components/ui/label";
+import axiosInstance from "@/fetch_api/axios";
+import { access_token } from "@/fetch_api/token";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const ConferenceType = () => {
   const [open, setOpen] = useState(0);
+  const [editOpen, setEditOpen] = useState(0);
   const [allDirections, setAllDirections] = useState<DirectionType[]>([]);
   const [directionId, setDirectionId] = useState<number>();
   const [reviewers, setReviewers] = useState<UserType[]>([]);
@@ -26,6 +32,8 @@ const ConferenceType = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("view");
+  const [editedName, setEditedName] = useState("");
 
   const directionPerPage = 6;
   const lastDirectionIndex = currentPage * directionPerPage;
@@ -59,6 +67,34 @@ const ConferenceType = () => {
   }, [directionId]);
 
   useEffect(() => {
+    // waiting time
+    window.setTimeout(() => {
+      if (directionId) {
+        if (userAddModal.isOpen === true) {
+          const getData = async () => {
+            const data = await getUserByDirectionId(directionId);
+            const reviewers = await getAllUsers("REVIEWER");
+            setAllReviewers(
+              reviewers.filter(
+                (item) => !data.map((item2) => item2.id).includes(item.id)
+              )
+            );
+            setReviewers(data);
+          };
+          getData();
+        } else {
+          const getData = async () => {
+            const data = await getUserByDirectionId(directionId);
+            setReviewers(data);
+          };
+          getData();
+        }
+      }
+      setLoading(false);
+    }, 500);
+  }, [userAddModal.isOpen]);
+
+  useEffect(() => {
     const getData = async () => {
       const data = await getAllDirections();
       setAllDirections(data);
@@ -67,9 +103,16 @@ const ConferenceType = () => {
     getData();
   }, []);
 
-  const toggleClick = (id: number) => {
+  const toggleClick = (id: number, status: string) => {
     setDirectionId(id);
-    setOpen(id === open ? 0 : id);
+    if (status === "edit") {
+      setEditOpen(id === editOpen ? 0 : id);
+      setOpen(0);
+    } else {
+      setOpen(id === open ? 0 : id);
+      setEditOpen(0);
+    }
+    setStatus(status);
   };
 
   const highlightSearchTerm = (text: string, term: string) => {
@@ -90,15 +133,84 @@ const ConferenceType = () => {
     try {
       setReviewers(reviewers.filter((item) => item.id !== id));
       const reviewerId = { id: id };
-      axios.put(`/api/direction/removeReviewer/${directionId}`, reviewerId, {
+      axiosInstance.put(
+        `/api/direction/removeReviewer/${directionId}`,
+        reviewerId,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
+    }
+  };
+
+  const handleSubmit = (id: number) => {
+    try {
+      if (editedName.length > 0) {
+        const direction = {
+          name: editedName,
+        };
+        axiosInstance.put(`/api/direction/${id}`, direction, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+      } else {
+        const direction = {
+          name: null,
+        };
+        axiosInstance.put(`/api/direction/${id}`, direction, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+      }
+      window.location.reload();
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
+    }
+  };
+
+  const handleDelateType = async (id: number) => {
+    try {
+      const { data } = await axiosInstance.delete(`/api/direction/${id}`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       });
-    } catch (error) {
-      console.log(error);
+      if(data.success) {
+        setAllDirections(allDirections.filter((item) => item.id !== id));
+        toast({
+          title: "Yo'nalish muvaffaqiyatli o'chirildi",
+          variant: "default",
+        });
+      } else {
+        toast({
+          title: "Yo'nalish o'chirilmadi chunki bu yo'nalish konferesiyada mavjud!",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+      });
     }
   };
+
 
   return (
     <div className="flex flex-col gap-y-[18px] px-[30px]">
@@ -144,61 +256,145 @@ const ConferenceType = () => {
                         <div className="flex flex-col">
                           <div
                             className={`flex flex-row justify-between items-center p-[12px] border-[1px] rounded-xl border-[#E2DEDE] ${
-                              open === item.id && "border-b-0 rounded-b-none"
+                              (open === item.id || editOpen === item.id) &&
+                              "border-b-0 rounded-b-none"
                             }`}
                           >
-                            <p className="text-lg font-medium">
-                              {highlightSearchTerm(item.name, searchTerm)}
-                            </p>
-                            <Button
-                              className="px-3 py-1.5 bg-typeblue hover:bg-typeblue/85"
-                              onClick={() => toggleClick(item.id)}
-                            >
-                              <MdOutlineKeyboardArrowDown
-                                className={`h-6 w-6 ${
-                                  open === item.id && "rotate-180"
-                                }`}
-                              />
-                              <span>Editors</span>
-                            </Button>
-                          </div>
-                          <div
-                            className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 ${
-                              open === item.id ? "rounded-t-none" : "hidden"
-                            }`}
-                          >
-                            <Button
-                              className="px-[30px] py-[9px] bg-typeyellow hover:bg-typeyellow/85 rounded-xl w-fit"
-                              onClick={onOpenUserAddModal}
-                            >
-                              {" "}
-                              + Muharrir qo&apos;shish
-                            </Button>
-                            {reviewers.map((reviewer) => (
-                              <div
-                                key={reviewer.id}
-                                className="flex items-center justify-between p-[6px] border-[1px] rounded-xl border-[#E2DEDE]"
+                            <div className="flex flex-row items-center justify-center gap-x-2">
+                              <Button
+                                className="p-1.5 bg-typeblue hover:bg-typeblue/85"
+                                onClick={() => toggleClick(item.id, "view")}
                               >
-                                <p className="text-base font-normal p-[6px] w-[200px] overflow-hidden">
-                                  {reviewer.fullName}
-                                </p>
-                                <p className="text-base font-normal p-[6px]">
-                                  {reviewer.phoneNumber}
-                                </p>
-                                <div className="flex items-center gap-x-[30px]">
-                                  <Button className="bg-typegreen hover:bg-typegreen/85 px-[12px] py-[6px]">
-                                    {reviewer.userStatus}
-                                  </Button>
-                                  <Button
-                                    className="bg-typered hover:bg-typered/85 px-[12px] py-[6px]"
-                                    onClick={() => handleDelate(reviewer.id)}
-                                  >
-                                    <RiDeleteBin6Line className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            ))}
+                                <MdOutlineKeyboardArrowDown
+                                  className={`h-6 w-6 ${
+                                    open === item.id && "rotate-180"
+                                  }`}
+                                />
+                              </Button>
+                              <p className="text-lg font-medium">
+                                {highlightSearchTerm(item.name, searchTerm)}
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-center gap-x-2">
+                              <Button
+                                className="p-1.5 bg-typered hover:bg-typered/85"
+                                onClick={() => handleDelateType(item.id)}
+                              >
+                                <AiFillDelete className="h-6 w-6" />
+                              </Button>
+                              <Button
+                                className="p-1.5 bg-typeyellow hover:bg-typeyellow/85"
+                                onClick={() => toggleClick(item.id, "edit")}
+                              >
+                                <FaEdit className="h-6 w-6" />
+                              </Button>
+                            </div>
                           </div>
+                          {status === "edit" ? (
+                            <div
+                              className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 ${
+                                editOpen === item.id
+                                  ? "rounded-t-none"
+                                  : "hidden"
+                              }`}
+                            >
+                              <Label htmlFor="name">
+                                Yo&apos;nalish nomini o&apos;zgartirish
+                              </Label>
+                              <Input
+                                placeholder="Yo'nalish nomi"
+                                defaultValue={item.name}
+                                onChange={(event) =>
+                                  setEditedName(event.target.value)
+                                }
+                              />
+                              <Button
+                                className="px-[30px] py-[9px] bg-typeyellow hover:bg-typeyellow/85 rounded-xl w-fit"
+                                onClick={onOpenUserAddModal}
+                              >
+                                {" "}
+                                + Muharrir qo&apos;shish
+                              </Button>
+                              {reviewers.map((reviewer) => (
+                                <div
+                                  key={reviewer.id}
+                                  className="flex items-center justify-between p-[6px] border-[1px] rounded-xl border-[#E2DEDE]"
+                                >
+                                  <p className="text-base font-normal p-[6px] w-[200px] overflow-hidden">
+                                    {reviewer.fullName}
+                                  </p>
+                                  <p className="text-base font-normal p-[6px]">
+                                    {reviewer.phoneNumber}
+                                  </p>
+                                  <div className="flex items-center gap-x-[30px]">
+                                    <Button className="bg-typegreen hover:bg-typegreen/85 px-[12px] py-[6px]">
+                                      {reviewer.userStatus}
+                                    </Button>
+                                    <Button
+                                      className="bg-typered hover:bg-typered/85 px-[12px] py-[6px]"
+                                      onClick={() => handleDelate(reviewer.id)}
+                                    >
+                                      <RiDeleteBin6Line className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                              <div className="flex flex-row justify-between w-full">
+                              <Button
+                                  className="bg-typered hover:bg-typered/85 px-[30px] py-[12px] rounded-xl w-fit"
+                                  onClick={() => setEditOpen(0)}
+                                >
+                                  Bekor qilish
+                                </Button>
+                                <Button
+                                  className="bg-typegreen hover:bg-typegreen/85 px-[30px] py-[12px] rounded-xl w-fit"
+                                  onClick={() => handleSubmit(item.id)}
+                                >
+                                  Saqlash
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              {reviewers.length > 0 ? (
+                                <div
+                                  className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 ${
+                                    open === item.id
+                                      ? "rounded-t-none"
+                                      : "hidden"
+                                  }`}
+                                >
+                                  {reviewers.map((reviewer) => (
+                                    <div
+                                      key={reviewer.id}
+                                      className="flex items-center justify-between p-[6px] border-[1px] rounded-xl border-[#E2DEDE]"
+                                    >
+                                      <p className="text-base font-normal p-[6px] w-[200px] overflow-hidden">
+                                        {reviewer.fullName}
+                                      </p>
+                                      <p className="text-base font-normal p-[6px]">
+                                        {reviewer.phoneNumber}
+                                      </p>
+                                      <Button className="bg-typegreen hover:bg-typegreen/85 px-[12px] py-[6px]">
+                                        {reviewer.userStatus}
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div
+                                  className={`flex flex-col border-[1px] p-[12px] rounded-xl border-[#E2DEDE] gap-y-3 justify-center items-center text-gray-500 ${
+                                    open === item.id
+                                      ? "rounded-t-none"
+                                      : "hidden"
+                                  }`}
+                                >
+                                  Hozircha bu yo&apos;nalishga muharrirlar
+                                  qo&apos;shilmagan!
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
                       </div>
                     ))}

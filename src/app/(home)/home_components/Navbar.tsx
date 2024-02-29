@@ -16,12 +16,30 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { UserType } from "@/types";
-import { getUserInfo } from "@/fetch_api/fetchUsers";
+import { getUserInfo, updateUserFullName } from "@/fetch_api/fetchUsers";
+import { FaUser } from "react-icons/fa";
+import { AiFillDashboard } from "react-icons/ai";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const Navbar = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState<UserType>();
   const [role, setRole] = useState("");
+  // edit user name
+  const [editedName, setEditedName] = useState("");
 
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
@@ -47,10 +65,35 @@ const Navbar = () => {
     }
   }, []);
 
+  useEffect(() => {
+      setUser(user);
+  }, [user])
+      
+
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       window.localStorage.removeItem("access_token");
       setIsAuth(false);
+    }
+  };
+
+  // update user name handler
+  const handleUpdateName = async() => {
+    if (editedName.length > 0) {
+      try {
+        const data = await updateUserFullName(editedName);
+        setUser(data);
+        toast({
+          title: "F.I.SH muvaffaqiyatli o'zgartirildi",
+          variant: "default",
+        });
+      } catch (error: any) {
+        toast({
+          title: error?.response?.data?.message,
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
+        });
+      }
     }
   };
 
@@ -134,13 +177,51 @@ const Navbar = () => {
                         : ""
                     }`}
                   >
-                    <Button
-                      onClick={handleLogout}
-                      className="p-2.5 rounded text-sm flex flex-row justify-between bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full"
-                    >
-                      Chiqish
-                      <ArrowRight className="w-5 h-4" />
-                    </Button>
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <Button className="p-2.5 rounded text-sm flex flex-row justify-between bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full">
+                          Profile
+                          <FaUser className="w-5 h-4" />
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent>
+                        <SheetHeader>
+                          <SheetTitle>Profilni tahrirlash</SheetTitle>
+                          <SheetDescription>
+                            Bu yerda profilingizga oʻzgartirishlar kiriting.
+                            Ishingiz tugagach, saqlash tugmasini bosing.
+                          </SheetDescription>
+                        </SheetHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="flex flex-row justify-between items-center gap-x-2">
+                            <Label htmlFor="name" className="text-right">
+                              F.I.SH
+                            </Label>
+                            <Input
+                              placeholder="Yo'nalish nomi"
+                              defaultValue={user?.fullName}
+                              onChange={(event) =>
+                                setEditedName(event.target.value)
+                              }
+                              className="w-full"
+                            />
+                          </div>
+                        </div>
+                        <SheetFooter>
+                          <SheetClose asChild>
+                            <div className="w-full flex justify-end">
+                              <Button
+                                className="p-2.5 rounded text-sm flex flex-row justify-between bg-typegreen text-mainwhite hover:bg-typegreen/85 transition-all duration-200 ease-in-out w-fit"
+                                type="submit"
+                                onClick={handleUpdateName}
+                              >
+                                Saqlash
+                              </Button>
+                            </div>
+                          </SheetClose>
+                        </SheetFooter>
+                      </SheetContent>
+                    </Sheet>
                     {(role.length > 0 && role === "SUPER_ADMIN") ||
                     (role.length > 0 && role === "REVIEWER") ? (
                       <Button
@@ -148,9 +229,16 @@ const Navbar = () => {
                         className="p-2.5 rounded text-sm flex flex-row gap-x-2 bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full"
                       >
                         Dashboard
-                        <ArrowRight className="w-5 h-4" />
+                        <AiFillDashboard className="w-5 h-4" />
                       </Button>
                     ) : null}
+                    <Button
+                      onClick={handleLogout}
+                      className="p-2.5 rounded text-sm flex flex-row justify-between bg-typered text-mainwhite hover:bg-typered/85 transition-all duration-200 ease-in-out w-full"
+                    >
+                      Chiqish
+                      <ArrowRight className="w-5 h-4" />
+                    </Button>
                   </PopoverContent>
                 </Popover>
               </>

@@ -10,7 +10,7 @@ import { getAllUsers } from "@/fetch_api/fetchUsers";
 import { UserType } from "@/types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import { set, z } from "zod";
+import { z } from "zod";
 import { DirectionAddSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
