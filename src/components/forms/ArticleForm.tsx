@@ -50,6 +50,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
   const [imageId, setimageId] = useState();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const [loading, setLoading] = useState(true);
 
   const [selectedFile, setSelectedFile] = useState("");
 
@@ -87,8 +88,9 @@ const ArticleForm = ({ name, id, direction }: Props) => {
       })
       .then((res) => {
         setimageId(res.data[0].id);
+        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("Error"));
   };
 
   const registerModal = useRegisterModal();
@@ -272,7 +274,13 @@ const ArticleForm = ({ name, id, direction }: Props) => {
                 {selectedFile ? `Tanlangan fayl` : "Fayl yuklash"}
               </h3>
               <label className="cursor-pointer rounded-xl bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
-                {selectedFile ? `${selectedFile}` : "Yuklash"}
+                {!selectedFile ? (
+                  "Yuklash"
+                ) : loading ? (
+                    "Yuklanyapti..."
+                ) : (
+                  `${selectedFile}`
+                )}
                 <Input
                   type="file"
                   className="hidden"
