@@ -159,7 +159,7 @@ const CheckArticles = () => {
                           <div className="w-[100px] flex justify-center">
                             <Button
                               className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typeblue hover:bg-typeblue/85 ${
-                                app.status === "FEEDBACK" && "bg-typeyellow"
+                                app.status === "FEEDBACK" && "bg-typeyellow hover:bg-typeyellow/85"
                               }`}
                             >
                               {app.status}
@@ -169,7 +169,7 @@ const CheckArticles = () => {
                             <Button
                               className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 ${
                                 app.paymentStatus === "UNPAID" &&
-                                "bg-typeyellow"
+                                "bg-typeyellow hover:bg-typeyellow/85"
                               }`}
                             >
                               {app.paymentStatus}

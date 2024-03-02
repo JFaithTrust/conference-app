@@ -171,11 +171,7 @@ const Navbar = () => {
                     </div>
                   </PopoverTrigger>
                   <PopoverContent
-                    className={`flex flex-col ${
-                      role === "SUPER_ADMIN" || role === "REVIEWER"
-                        ? "gap-y-2"
-                        : ""
-                    }`}
+                    className={`flex flex-col gap-y-2`}
                   >
                     <Sheet>
                       <SheetTrigger asChild>

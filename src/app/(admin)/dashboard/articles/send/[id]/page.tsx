@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
-import { getApplicationById } from "@/fetch_api/fetchApplications";
+import { getApplicationById, putApplicationPaymentStatus } from "@/fetch_api/fetchApplications";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,6 +35,13 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
       </div>
     );
   }
+
+  // update payment status 
+  const handlePaymentStatus = async (id: number, status: string) => {
+    await putApplicationPaymentStatus(id, status === "PAID" ? "UNPAID" : "PAID");
+    alert("To'lovni o'zgartirmoqchimisiz?")
+    router.back();
+  };
 
   return (
     <>
@@ -166,20 +173,32 @@ const ArticleInfo = ({ params }: { params: { id: number } }) => {
                   Status
                 </span>
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
-                  <Button className={`rounded-2xl px-3 py-1.5 bg-typegreen text-white hover:bg-typegreen/85 ${appData.status === 'FEEDBACK' && 'bg-typeyellow'}`}>
+                  <Button
+                    className={`rounded-2xl px-3 py-1.5 bg-typegreen text-white hover:bg-typegreen/85 ${
+                      appData.status === "FEEDBACK" && "bg-typeyellow"
+                    }`}
+                  >
                     <span>{appData.status}</span>
                   </Button>
                 </div>
               </div>
               <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-transparent items-center">
-                <span className="font-semibold font-source-serif-pro text-lg">
-                  To&apos;lov
-                </span>
-                <div className="flex flex-row justify-between items-center w-full gap-x-3">
+                {appData.paymentStatus === "PAID" ? (
+                  <span className="font-semibold font-source-serif-pro text-lg">
+                    To&apos;lovni bekor qilish
+                  </span>
+                ) : (
+                  <span className="font-semibold font-source-serif-pro text-lg">
+                    To&apos;lovni tasdiqlash
+                  </span>
+                )}
+                <div className="flex flex-row justify-end items-center w-full gap-x-3">
                   <Button
                     className={`rounded-2xl px-6 py-1.5 bg-typegreen text-white hover:bg-typegreen/85 ${
-                      appData.paymentStatus === "UNPAID" && "bg-typeyellow"
+                      appData.paymentStatus === "UNPAID" &&
+                      "bg-typeyellow hover:bg-typeyellow/85"
                     }`}
+                    onClick={() => handlePaymentStatus(appData.id, appData.paymentStatus)}
                   >
                     <span>{appData.paymentStatus}</span>
                   </Button>

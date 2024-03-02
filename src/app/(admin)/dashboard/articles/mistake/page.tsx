@@ -21,7 +21,7 @@ const MistakenArticle = () => {
 
   useEffect(() => {
     const getByStatus = async () => {
-      const feedbacks = await getAllFeedbacks();
+      const feedbacks = await getAllFeedbacks("ACCEPTED", "PAID");
       setAllApplications(feedbacks);
       setLoading(false);
     };
@@ -92,7 +92,10 @@ const MistakenArticle = () => {
                 </div>
                 <span className="w-[250px]">Muharrir ismi</span>
                 <span className="w-[250px]">Jo&apos;natuvchi ismi</span>
-                <span className="text-center w-[100px]">Status</span>
+                <div className="flex flex-row justify-between w-[200px]">
+                  <span className="text-center w-[100px]">Status</span>
+                  <span className="text-end w-[100px]">To&apos;lov</span>
+                </div>
               </div>
               {allApplications.length > 0 ? (
                 <div className="flex flex-col gap-y-[9px] w-full">
@@ -142,9 +145,22 @@ const MistakenArticle = () => {
                             searchTerm
                           )}
                         </span>
-                        <Button className="capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 w-[100px]">
-                          {app.status}
-                        </Button>
+                        <div className="flex flex-row justify-between w-[200px]">
+                          <div className="w-[100px] flex justify-center">
+                            <Button
+                              className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 $`}
+                            >
+                              {app.status}
+                            </Button>
+                          </div>
+                          <div className="w-[100px] flex justify-end">
+                            <Button
+                              className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 $`}
+                            >
+                              {app.paymentStatus}
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     ))}
                 </div>

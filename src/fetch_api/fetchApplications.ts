@@ -78,14 +78,32 @@ export const getApplicationByConferenceId = async (
   return data;
 };
 
-export const getAllFeedbacks = async (): Promise<ApplicationType[]> => {
+export const getAllFeedbacks = async (
+  status: string | null,
+  pstatus: string | null
+): Promise<ApplicationType[]> => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.get(`/api/application/all/byStatus`, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-  return data;
+  if (status && pstatus) {
+    const { data } = await axios.get(
+      `/api/application/all/byStatus?status=${status}&paymentStatus=${pstatus}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return data;
+  } else {
+    const { data } = await axios.get(
+      `/api/application/all/byStatus`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return data;
+  }
 };
 
 export const getReviewersApplications = async (): Promise<
@@ -104,6 +122,25 @@ export const putApplicationStatus = async (id: number, status: string) => {
   const access_token = localStorage.getItem("access_token");
   const { data } = await axios.put(
     `/api/application/status/${id}?status=${status}`,
+    "mazgi",
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return data;
+};
+
+// update application payment status
+
+export const putApplicationPaymentStatus = async (
+  id: number,
+  status: string
+) => {
+  const access_token = localStorage.getItem("access_token");
+  const { data } = await axios.put(
+    `/api/application/payment/${id}?status=${status}`,
     "mazgi",
     {
       headers: {

@@ -65,3 +65,19 @@ export const updateUserFullName = async ( fullName: string) => {
   );
   return data;
 };
+
+// change user status
+
+export const changeUserStatus = async (id: number, enable: boolean) => {
+  const access_token = localStorage.getItem("access_token");
+  const { data } = await axios.put(
+    `/api/user/changeStatus/${id}?enable=${enable}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return data;
+};

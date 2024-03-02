@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserById } from "@/fetch_api/fetchUsers";
+import { changeUserStatus, getUserById } from "@/fetch_api/fetchUsers";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -20,6 +20,12 @@ const UserInfo = ({ params }: { params: { id: number } }) => {
     };
     getUserData();
   }, [params.id]);
+
+  // change user status
+  const handleUserStatus = async (id: number, status: string) => {
+    await changeUserStatus(id, status === "ACTIVE" ? false : true);
+    router.back()
+  };
 
   return (
     <>
@@ -52,16 +58,37 @@ const UserInfo = ({ params }: { params: { id: number } }) => {
                 <div className="flex flex-row justify-between">
                   <div className="flex flex-col gap-y-2">
                     <span className="font-normal text-sm">Status</span>
-                    <Button className="py-3 px-12 bg-typegreen hover:bg-typegreen/85">
+                    <Button
+                      className={`py-3 px-12 ${
+                        userData.userStatus === "INACTIVE"
+                          ? "bg-typered hover:bg-typered/85"
+                          : "bg-typegreen hover:bg-typegreen/85"
+                      }`}
+                    >
                       {userData.userStatus}
                     </Button>
                   </div>
                   <div className="flex flex-col gap-y-2">
-                    <span className="font-normal text-sm">
-                      Foydalanuvchini bloklash
-                    </span>
-                    <Button className="py-3 px-12" variant={"destructive"}>
-                      Block
+                    {userData.userStatus === "INACTIVE" ? (
+                      <span className="font-normal text-sm">
+                        Foydalanuvchini blokdan chiqarish
+                      </span>
+                    ) : (
+                      <span className="font-normal text-sm">
+                        Foydalanuvchini bloklash
+                      </span>
+                    )}
+                    <Button
+                      className={`py-3 px-12 ${
+                        userData.userStatus === "ACTIVE"
+                          ? "bg-typered hover:bg-typered/85"
+                          : "bg-typegreen hover:bg-typegreen/85"
+                      }`}
+                      onClick={() =>
+                        handleUserStatus(userData.id, userData.userStatus)
+                      }
+                    >
+                      {userData.userStatus === "ACTIVE" ? "Blok" : "Unblok"}
                     </Button>
                   </div>
                 </div>

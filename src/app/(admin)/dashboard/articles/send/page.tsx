@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
 import CustomPagination from "@/components/ui/CustomPagination";
-import { getAllApplications } from "@/fetch_api/fetchApplications";
+import { getAllFeedbacks } from "@/fetch_api/fetchApplications";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 
 const SendArticles = () => {
@@ -20,7 +20,7 @@ const SendArticles = () => {
 
   useEffect(() => {
     const getAllAplications = async () => {
-      const applications = await getAllApplications();
+      const applications = await getAllFeedbacks(null, null);
       setAllApplications(applications);
       setLoading(false);
     };
@@ -98,7 +98,7 @@ const SendArticles = () => {
                 <span className="w-[250px]">Jo&apos;natuvchi</span>
                 <div className="flex flex-row justify-between w-[200px]">
                   <span className="text-center w-[100px]">Status</span>
-                  <span className="text-center w-[100px]">To&apos;lov</span>
+                  <span className="text-end w-[100px]">To&apos;lov</span>
                 </div>
               </div>
               {currentApplications.length > 0 ? (
@@ -159,7 +159,7 @@ const SendArticles = () => {
                           <div className="w-[100px] flex justify-center">
                             <Button
                               className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 ${
-                                app.status === "FEEDBACK" && "bg-typeyellow"
+                                app.status === "FEEDBACK" && "bg-typeyellow hover:bg-typeyellow/85"
                               }`}
                             >
                               {app.status}
@@ -169,7 +169,7 @@ const SendArticles = () => {
                             <Button
                               className={`capitalize text-white rounded-2xl text-center py-1.5 px-4 bg-typegreen hover:bg-typegreen/85 ${
                                 app.paymentStatus === "UNPAID" &&
-                                "bg-typeyellow"
+                                "bg-typeyellow hover:bg-typeyellow/85"
                               }`}
                             >
                               {app.paymentStatus}
