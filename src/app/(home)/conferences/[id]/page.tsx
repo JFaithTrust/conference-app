@@ -42,7 +42,9 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
       const application = await getApplicationByConferenceId(params.id);
       setConference(conference);
       setDirection(directions);
-      setApplications(application);
+      setApplications(
+        application.filter((item) => item.status === "ACCEPTED" && item.paymentStatus === "PAID")
+      );
       setLoading(false);
     };
     getSourceData();
