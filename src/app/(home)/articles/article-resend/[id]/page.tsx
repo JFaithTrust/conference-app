@@ -14,6 +14,7 @@ import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
 import {ArticleFeedbackForm} from "@/components/forms";
 import {getAllAnswersByApplicationId} from "@/fetch_api/fetchAnswers";
+import {Badge} from "@/components/ui/badge";
 
 const ConferenceDetail = ({params}: { params: { id: number } }) => {
     const [application, setApplication] = useState<ApplicationType>();
@@ -75,11 +76,21 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                 {answers?.length > 0 ? (
                     <div>
                         <span>Tahrirchini javobi</span>
-                        {answers.map(answer => (
+                        {answers
+                            .sort((a, b) => {
+                                if (a.id>b.id)
+                                    return -1
+                                else
+                                    return 1
+                            })
+                            .map(answer => (
                             <div
                                 key={answer.id}
-                                className="bg-typeyellow w-full py-6 px-3 rounded-xl text-white text-xl font-bold ">
+                                className={`${answer.status == "PENDING" ? "bg-typeyellow" : "bg-typegreen"} w-full py-6 px-5 rounded-xl text-white text-xl font-bold my-2 flex justify-between`}>
                                 <span>{answer.text}</span>
+                                <Badge className={`bg-white border-2 rounded-full hover:bg-white ${answer.status == "PENDING"? "text-typeyellow" : "text-typegreen"}`}>
+                                    {answer.status}
+                                </Badge>
                             </div>
                         ))}
                     </div>
