@@ -81,3 +81,18 @@ export const changeUserStatus = async (id: number, enable: boolean) => {
   );
   return data;
 };
+
+// chnage reviewer to user
+export const changeReviewerToUser = async (id: number) => {
+  const access_token = localStorage.getItem("access_token");
+  const { data } = await axios.put(
+    `/api/user/make/user/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return data;
+};

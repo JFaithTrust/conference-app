@@ -41,6 +41,7 @@ import axios from "@/fetch_api/axios";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const ConferenceCreate = () => {
   const [open, setOpen] = useState(false);
@@ -61,6 +62,7 @@ const ConferenceCreate = () => {
   }, []);
 
   const form = useForm<z.infer<typeof ConferenceAddSchema>>({
+    resolver: zodResolver(ConferenceAddSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -87,16 +89,13 @@ const ConferenceCreate = () => {
           Authorization: `Bearer ${access_token}`,
         },
       });
-
       const data = response.data;
-
       if (data) {
         toast({
           title: "Konferensiya muvaffaqiyatli yaratildi",
           variant: "default",
         });
       }
-
       if (selectedDirections.length > 0) {
         const directionsIdList: any = [];
         direction.filter((item) => {

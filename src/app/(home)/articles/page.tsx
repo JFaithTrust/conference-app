@@ -82,14 +82,8 @@ const Articles = () => {
     ));
   };
 
-  const handleClick = (status: string, id: number) => {
-    if (status === "ACCEPTED") {
-      router.push(`/articles/${id}`)
-    }else if ( status === "FEEDBACK"){
-      router.push(`/articles-resend/${id}`)
-    } else {
-      return
-    }
+  const handleClick = (id: number) => {
+    router.push(`/articles/article-resend/${id}`)
   };
 
   if (loading) {
@@ -173,7 +167,7 @@ const Articles = () => {
                             : "border-typeyellow hover:border-typeyellow/85"
                         }
                         `}
-                      onClick={() => handleClick(app.status, app.id)}
+                      onClick={() => handleClick(app.id)}
                     >
                       <span className="w-[48px]">{app.id}</span>
                       <span className="w-[350px] text-start overflow-hidden truncate">

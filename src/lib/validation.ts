@@ -7,8 +7,8 @@ export const loginSchema = z.object({
 
 const passwordSchema = z
   .string()
-  .min(8, { message: "Password must be at least 8 characters long." })
-  .max(30, { message: "Password must not be longer than 30 characters." });
+  .min(8, { message: "Password kamida 8 ta harakterdan iborat bo'lishi kerak" })
+  .max(30, { message: "Password 30 ta harakterdan oshmasligi kerak" });
 
 export const registerSchema = z
   .object({
@@ -18,7 +18,7 @@ export const registerSchema = z
     confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "Passwordlar mos kelmadi! Iltimos qayta urinib ko'ring.",
     path: ["confirmPassword"],
   });
 
@@ -37,12 +37,12 @@ export const forgotPasswordSchema3 = z.object({
 
 export const createPostSchema = z.object({
   name: z.string(),
-  authors: z.string().nonempty("Please write authors name."),
-  description: z.string().nonempty("Please write description."),
+  authors: z.string().nonempty("Iltimos mualliflarni kiriting."),
+  description: z.string().nonempty("Iltimos izoh qoldiring."),
 });
 
 export const userAddSchema = z.object({
-  users: z.array(z.string()).nonempty("Please select at least one reviewer."),
+  users: z.array(z.string()).nonempty("Iltimos foydalanuvchilarni tanlang."),
 });
 
 export const ConfirmPhoneCodeSchema = z.object({
@@ -60,12 +60,16 @@ export const ConferenceAddSchema = z.object({
   address: z.string().min(3),
   cost: z.string().min(0),
   startsAt: z.date({
-    required_error: "A date is required.",
+    required_error: "Sana kiritilishi shart.",
   }),
   endsAt: z.date({
-    required_error: "A date is required.",
+    required_error: "Sana kiritilishi shart.",
   }),
   deadlineForThesis: z.date({
-    required_error: "A date is required.",
+    required_error: "Sana kiritilishi shart.",
   }),
+});
+
+export const FeedbackSchema = z.object({
+  text: z.string().nonempty("Izohni kiriting."),
 });

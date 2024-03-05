@@ -11,6 +11,7 @@ import useUserAddModal from "@/hooks/useUserAddModal";
 import { UserAddForm } from "@/components/forms";
 import { HiOutlinePlus } from "react-icons/hi2";
 import Loading from "@/app/(home)/home_components/loading/Loading";
+import { useRouter } from "next/navigation";
 
 const Reviewers = () => {
   const [allUsers, setAllUsers] = useState<UserType[]>([]);
@@ -27,6 +28,7 @@ const Reviewers = () => {
   const [sortByStatus, setSortByStatus] = useState<"asc" | "desc">("asc");
 
   const userAddModal = useUserAddModal();
+  const router = useRouter();
 
   const onOpenUserAddModal = useCallback(() => {
     userAddModal.onOpen();
@@ -170,6 +172,7 @@ const Reviewers = () => {
                   .map((user) => (
                     <div
                       key={user.id}
+                      onClick={() => router.push(`/dashboard/reviewers/${user.id}`)}
                       className={
                         "flex flex-row pl-3 pr-1.5 py-1 items-center w-full text-lg font-norma bg-transparent hover:bg-slate-200 border-[1px] border-solid border-[#61AFFE] rounded-lg cursor-pointer transition-all duration-300 ease-in-out justify-between"
                       }

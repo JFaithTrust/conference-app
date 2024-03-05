@@ -2,7 +2,7 @@
 
 import { getUserById } from "@/fetch_api/fetchUsers";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { ApplicationType } from "@/types";
@@ -17,11 +17,18 @@ import { Label } from "@/components/ui/label";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { FeedbackModal } from "@/components/modals";
+import useFeedbackModal from "@/hooks/useFeedbackModal";
 
 const CheckArticles = ({ params }: { params: { id: number } }) => {
   const [appData, setAppData] = useState<ApplicationType>();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const feedbackModal = useFeedbackModal();
+
+  const onOpenFeedbackModal = useCallback(async () => {
+    feedbackModal.onOpen();
+  }, [feedbackModal]);
 
   useEffect(() => {
     const getAppData = async () => {
@@ -53,19 +60,6 @@ const CheckArticles = ({ params }: { params: { id: number } }) => {
     }
   };
 
-  const handleFeedback = async (id: number) => {
-    try {
-      await putApplicationStatus(id, "FEEDBACK");
-      router.back();
-    } catch (error: any) {
-      toast({
-        title: error?.response?.data?.message,
-        variant: "destructive",
-        action: <ToastAction altText="Try again">Qayta urinish</ToastAction>,
-      });
-    }
-  };
-
   const handleRejected = async (id: number) => {
     try {
       await putApplicationStatus(id, "REJECTED");
@@ -81,6 +75,7 @@ const CheckArticles = ({ params }: { params: { id: number } }) => {
 
   return (
     <>
+      <FeedbackModal id={params.id} />
       {appData && (
         <div className="flex flex-col gap-y-[18px] px-[30px]">
           <Button
@@ -219,12 +214,13 @@ const CheckArticles = ({ params }: { params: { id: number } }) => {
               </div>
               <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-transparent items-center">
                 <span className="font-semibold font-source-serif-pro text-lg">
-                  Qaytarish
+                  Javob Qaytarish
                 </span>
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
                   <Button
                     className={`rounded-2xl px-6 py-1.5 bg-typeyellow text-white hover:bg-typeyellow/85 $`}
-                    onClick={() => handleFeedback(appData.id)}
+                    // onClick={() => handleFeedback(appData.id)}
+                    onClick={onOpenFeedbackModal}
                   >
                     <span>Feedback</span>
                   </Button>

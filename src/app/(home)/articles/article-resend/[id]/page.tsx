@@ -8,10 +8,14 @@ import { ApplicationType, ConferenceType, DirectionType } from "@/types";
 import Loading from "@/app/(home)/home_components/loading/Loading";
 import { getApplicationById } from "@/fetch_api/fetchApplications";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { ArticleFeedbackForm } from "@/components/forms";
 
 const ConferenceDetail = ({ params }: { params: { id: number } }) => {
-  const [application, setApplication] = useState<ApplicationType>()
-  const [direction, setDirection] = useState<DirectionType[]>([]);
+  const [application, setApplication] = useState<ApplicationType>();
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -55,41 +59,106 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
         <TbArrowNarrowLeft className="w-5 h-5 text-black" size={24} />
         <h2 className="text-black">Back</h2>
       </div>
+      <div
+        className="flex flex-col gap-1 py-[9px] rounded-sm justify-center cursor-pointer w-full"
+        onClick={handleBack}
+      >
+        <span>Tahrirchini javobi</span>
+        <div className="bg-typeyellow w-full py-6 px-3 rounded-xl text-white text-xl font-bold">
+          Imloviy xatoga yo&apos;l qo&apos;yilgan
+        </div>
+      </div>
       {application && (
-        <div className="flex flex-col p-[30px] gap-[48px] rounded-xl bg-mainwhite shadow-[0_0_4px_2px_#DCDBFA]">
+        <div className="flex flex-col p-[30px] gap-y-[30px] rounded-xl bg-mainwhite shadow-[0_0_4px_2px_#DCDBFA]">
           <div className="flex justify-end">
-            <Button variant={'activeLink'}>
+            <Button
+              className={` px-3 py-1.5 rounded-full ${
+                application.status === "FEEDBACK"
+                  ? "bg-typeyellow hover:bg-typeyellow/85"
+                  : "bg-typegreen hover:bg-typegreen/85"
+              }`}
+            >
               {application.status}
             </Button>
           </div>
-          <h1 className="text-justify text-4xl font-semibold leading-[100%] font-source-serif-pro">
-            {application.name}
-          </h1>
+          <div className="flex flex-col gap-y-1.5">
+            <span>Maqola nomi</span>
+            <h1 className="text-justify text-4xl font-semibold leading-[100%] font-source-serif-pro">
+              {application.name}
+            </h1>
+          </div>
           <div className="flex flex-col p-3 gap-y-6 border-[1px] border-solid border-violet-200 rounded-md">
-            <p>Konferensiya yo&apos;nalishlari</p>
+            <p>Konferensiya nomi</p>
+            <div className="flex flex-col gap-y-3">
+              <p className="text-lg text-justify">
+                {application.conference.name}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col p-3 gap-y-6 border-[1px] border-solid border-violet-200 rounded-md">
+            <p>Maqola yo&apos;nalishi</p>
             <div>
               <ul className="text-xl font-semibold list-disc ml-5">
-                {direction.map((item) => (
-                  <li key={item.id}>{item.name}</li>
-                ))}
+                <li>{application.direction?.name}</li>
               </ul>
             </div>
           </div>
-          <div className="flex flex-col p-3 gap-y-6 border-[1px] border-solid border-violet-200 rounded-md">
-            <p>Konferensiya haqida ma&apos;lumot</p>
-            <div className="flex flex-col gap-y-3">
-              <p className="text-lg text-justify">{application.description}</p>
+          <div className="flex flex-col gap-y-2">
+            <span className="text-xl font-semibold font-source-serif-pro">
+              Maqola aftorlari :{" "}
+            </span>
+            <span>{application.authors}</span>
+          </div>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-herowhite rounded-xl border-[1px] border-solid border-[#DEDBFF] items-center">
+              <span className="font-semibold font-source-serif-pro text-lg">
+                Maqola yuborilgan sana
+              </span>
+              <div className="flex flex-row justify-between items-center w-full gap-x-3">
+                <Button className="rounded-lg p-3 bg-white text-black border-[1px] border-solid hover:bg-slate-50 border-violet-200 w-full">
+                  <span>
+                    {application.createdAt &&
+                      format(application.createdAt, "dd-MM-yyyy")}
+                  </span>
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-herowhite rounded-xl border-[1px] border-solid border-[#DEDBFF] items-center">
+              <span className="font-semibold font-source-serif-pro text-lg">
+                Faylni yuklab olish
+              </span>
+              <div className="flex flex-row justify-between items-center w-full gap-x-3">
+                <Button
+                  className="rounded-lg p-3 bg-white text-black border-[1px] border-solid hover:bg-slate-50 border-violet-200 w-full"
+                  onClick={() =>
+                    router.push(application.thesisFile?.downloadLink || "")
+                  }
+                >
+                  <span>Yuklab olish</span>
+                </Button>
+              </div>
             </div>
           </div>
-          <p className="text-xl font-semibold">Qabul qilingan maqolalar</p>
-          <div className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center">
-            <h2></h2>
-            <h2>Name of Conference</h2>
-            <h3>12.04.2023</h3>
-            <CustomButton
-              label="Yuklab olish"
-              mainable
-              classNames="rounded-3xl px-[18px] py-[6px]"
+          <div>
+            <Label htmlFor="description" className="text-lg font-semibold">
+              Tavsif
+            </Label>
+            <Textarea
+              className="resize-none border-[1px] border-solid border-violet-200"
+              value={application.description}
+              readOnly
+            />
+          </div>
+          <div className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">
+            <h2 className="text-3xl font-semibold">Maqolani jo&apos;natish</h2>
+            <ArticleFeedbackForm
+              name={application.conference.name}
+              id={application.conference.id}
+              direction={(application.direction !== undefined) ? [application.direction] : []}
+              applicationId={application.id}
+              thesisFileId={application.thesisFile?.id || 0}
             />
           </div>
         </div>

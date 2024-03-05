@@ -59,3 +59,11 @@ export interface ApplicationType {
   createdAt?: string | Date;
   updatedAt?: Date;
 }
+
+
+export interface AnswerType {
+  id: number;
+  text: string;
+  application: ApplicationType;
+  status: "ANSWERED" | "PENDIND";
+}
