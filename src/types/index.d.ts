@@ -65,5 +65,5 @@ export interface AnswerType {
   id: number;
   text: string;
   application: ApplicationType;
-  status: "ANSWERED" | "PENDIND";
+  status: "ANSWERED" | "PENDING";
 }

@@ -39,6 +39,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { ToastAction } from "../ui/toast";
 import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
   name: string;
@@ -55,6 +56,8 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
   const [loading, setLoading] = useState(true);
 
   const [selectedFile, setSelectedFile] = useState("");
+
+  const router = useRouter()
 
   const handleFileChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
@@ -136,6 +139,7 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
               title: "Maqola muvaffaqiyatli yuborildi",
               variant: "default",
             });
+            router.back()
           }
         })
         .catch((err) => {
