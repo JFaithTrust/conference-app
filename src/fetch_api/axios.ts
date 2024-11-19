@@ -8,9 +8,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_GLOBAL_API_URL!;
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
-  // headers: {
-  //   "ngrok-skip-browser-warning": "any",
-  // },
+  headers: {
+    "ngrok-skip-browser-warning": "any",
+  },
 });
 
 export default axiosInstance;
