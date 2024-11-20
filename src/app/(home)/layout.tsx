@@ -8,10 +8,8 @@ const HomeLayout = ({ children }: ChildProps) => {
   const items = [
     { image: "/images/image_1.png" },
     { image: "/images/image_2.png" },
-    { image: "/images/image_3.png" },
-    { image: "/images/image_1.png" },
-    { image: "/images/image_2.png" },
-    { image: "/images/image_3.png" },
+    { image: "/images/innovation.png" },
+    { image: "/images/oliy.png" },
   ];
   return (
     <div className="min-h-screen w-full">
