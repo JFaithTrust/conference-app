@@ -1,5 +1,5 @@
 import axios from './axios'
-import { ConferenceType } from "../types";
+import { ConferenceType } from "@/types";
 
 
 export const getConferenceById = async (id: number): Promise<ConferenceType> => {

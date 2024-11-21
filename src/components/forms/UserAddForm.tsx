@@ -57,7 +57,7 @@ const UserAddForm = ({ allUsers, directionId }: UserAddFormProps) => {
         });
       });
       if (directionId) {
-        const { data } : any = axios.put(`/api/direction/addReviewer/${directionId}`, usersIdList, {
+        const { data } : any = axios.post(`/api/direction/addReviewer/${directionId}`, usersIdList, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },

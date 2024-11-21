@@ -106,7 +106,7 @@ const ConferenceCreate = () => {
           }
         });
 
-        const res = await axios.put(
+        const res = await axios.post(
           `/api/conference/editDirections/${data.id}`,
           directionsIdList,
           {

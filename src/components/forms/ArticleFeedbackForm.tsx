@@ -85,7 +85,7 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
     const formData = new FormData();
     formData.append("file", file);
     axios
-      .put(`/api/attachment/${thesisFileId}`, formData, {
+      .post(`/api/attachment/edit/${thesisFileId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${access_token}`,
@@ -125,7 +125,7 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
         conference: { id: id },
       };
       axios
-        .put(`/api/application/${applicationId}`, application, {
+        .post(`/api/application/edit/${applicationId}`, application, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },

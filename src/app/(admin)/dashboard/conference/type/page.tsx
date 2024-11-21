@@ -133,7 +133,7 @@ const ConferenceType = () => {
     try {
       setReviewers(reviewers.filter((item) => item.id !== id));
       const reviewerId = { id: id };
-      axiosInstance.put(
+      axiosInstance.post(
         `/api/direction/removeReviewer/${directionId}`,
         reviewerId,
         {
@@ -157,7 +157,7 @@ const ConferenceType = () => {
         const direction = {
           name: editedName,
         };
-        axiosInstance.put(`/api/direction/${id}`, direction, {
+        axiosInstance.post(`/api/direction/edit/${id}`, direction, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
@@ -166,7 +166,7 @@ const ConferenceType = () => {
         const direction = {
           name: null,
         };
-        axiosInstance.put(`/api/direction/${id}`, direction, {
+        axiosInstance.post(`/api/direction/edit/${id}`, direction, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
@@ -184,7 +184,7 @@ const ConferenceType = () => {
 
   const handleDelateType = async (id: number) => {
     try {
-      const { data } = await axiosInstance.delete(`/api/direction/${id}`, {
+      const { data } = await axiosInstance.post(`/api/direction/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },

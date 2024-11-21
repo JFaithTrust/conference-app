@@ -40,12 +40,12 @@ export const getApplicationsByConferenceAndDirectionId = async (
 };
 
 export const putApplicationByUserId = async (
-  revierwerId: number,
+  reviewerId: number,
   applications: []
 ) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
-    `/api/user/addApplication/${revierwerId}`,
+  const { data } = await axios.post(
+    `/api/user/addApplication/${reviewerId}`,
     applications,
     {
       headers: {
@@ -120,7 +120,7 @@ export const getReviewersApplications = async (): Promise<
 
 export const putApplicationStatus = async (id: number, status: string) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
+  const { data } = await axios.post(
     `/api/application/status/${id}?status=${status}`,
     "mazgi",
     {
@@ -139,7 +139,7 @@ export const putApplicationPaymentStatus = async (
   status: string
 ) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
+  const { data } = await axios.post(
     `/api/application/payment/${id}?status=${status}`,
     "mazgi",
     {

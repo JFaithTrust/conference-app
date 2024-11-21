@@ -1,4 +1,4 @@
-import { DirectionType } from "../types";
+import { DirectionType } from "@/types";
 import axios from "./axios";
 
 export const getDirectionByConferenceId = async (

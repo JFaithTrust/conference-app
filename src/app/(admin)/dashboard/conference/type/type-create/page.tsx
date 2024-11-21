@@ -102,7 +102,7 @@ const TypeCreate = () => {
           });
         });
 
-        const res = await axios.put(
+        const res = await axios.post(
           `/api/direction/addReviewer/${data.id}`,
           usersIdList,
           {

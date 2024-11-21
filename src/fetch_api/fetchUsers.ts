@@ -33,7 +33,7 @@ export const getUserByDirectionId = async (id: number): Promise<UserType[]> => {
 
 export const putAllUsers = async (users: UserType[]) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(`/api/user/make/reviewer`, users, {
+  const { data } = await axios.post(`/api/user/make/reviewer`, users, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
@@ -54,8 +54,8 @@ export const getUserInfo = async () => {
 // update user full name
 export const updateUserFullName = async ( fullName: string) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
-    `/api/user`,
+  const { data } = await axios.post(
+    `/api/user/edit`,
     { fullName },
     {
       headers: {
@@ -70,7 +70,7 @@ export const updateUserFullName = async ( fullName: string) => {
 
 export const changeUserStatus = async (id: number, enable: boolean) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
+  const { data } = await axios.post(
     `/api/user/changeStatus/${id}?enable=${enable}`,
     {},
     {
@@ -85,7 +85,7 @@ export const changeUserStatus = async (id: number, enable: boolean) => {
 // chnage reviewer to user
 export const changeReviewerToUser = async (id: number) => {
   const access_token = localStorage.getItem("access_token");
-  const { data } = await axios.put(
+  const { data } = await axios.post(
     `/api/user/make/user/${id}`,
     {},
     {

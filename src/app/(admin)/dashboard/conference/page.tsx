@@ -81,7 +81,7 @@ const Conference = () => {
 
   const handeleDelete = (id: number) => {
     axios
-      .delete(`/api/conference/${id}`, {
+      .post(`/api/conference/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },

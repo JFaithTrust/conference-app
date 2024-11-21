@@ -103,8 +103,8 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
       deadlineForThesis: values.deadlineForThesis,
     };
     try {
-      const response = await axios.put(
-        `/api/conference/${params.id}`,
+      const response = await axios.post(
+        `/api/conference/edit/${params.id}`,
         conferense,
         {
           headers: {
@@ -122,7 +122,7 @@ const ConferenceEdit = ({ params }: { params: { id: number } }) => {
         }
       });
 
-      await axios.put(
+      await axios.post(
         `/api/conference/editDirections/${params.id}`,
         directionsIdList,
         {
