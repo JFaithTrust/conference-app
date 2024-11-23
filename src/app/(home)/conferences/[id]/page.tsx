@@ -90,18 +90,21 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
           <h1 className="text-justify text-4xl font-semibold leading-[100%] font-source-serif-pro">
             {conference.name}
           </h1>
-          <div className="flex flex-row justify-between items-center">
-            <h2 className="text-3xl font-medium leading-[100%] font-roboto border-[1px] border-solid border-violet-200 px-[30px] py-[16px] rounded-md">
-              {formatDate(conference.deadlineForThesis, false)}
-            </h2>
-            <CountdownTimer
-              targetDate={conference.deadlineForThesis}
-              classNames="border-[1px] border-solid border-violet-200 text-3xl"
-            />
+          <div className={"flex flex-col gap-y-2 justify-end"}>
+            <h3 className="text-sm font-normal">Ro&apos;yhatdan o&apos;tish vaqti</h3>
+            <div className="flex flex-row justify-between items-center">
+              <h2 className="text-3xl font-medium leading-[100%] font-roboto border-[1px] border-solid border-violet-200 px-[30px] py-[16px] rounded-md">
+                {formatDate(conference.deadlineForThesis, false)}
+              </h2>
+              <CountdownTimer
+                  targetDate={conference.deadlineForThesis}
+                  classNames="border-[1px] border-solid border-violet-200 text-3xl"
+              />
+            </div>
           </div>
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-col p-3 gap-y-1">
-              <h3 className="text-sm font-normal">Conference start time</h3>
+              <h3 className="text-sm font-normal">Konferensiya boshlanish vaqti</h3>
               <div className="flex flex-row gap-x-3 items-center">
                 <div className="border-[1px] border-solid border-violet-200 rounded-md px-[30px] py-[16px]">
                   <span className="leading-[100%] font-main-text font-semibold text-2xl">
@@ -117,7 +120,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
               </div>
             </div>
             <div className="flex flex-col p-3 gap-y-1">
-              <h3 className="text-sm font-normal">Conference end time</h3>
+              <h3 className="text-sm font-normal">Konferensiya tugash vaqti</h3>
               <div className="flex flex-row gap-x-3 items-center">
                 <div className="border-[1px] border-solid border-violet-200 rounded-md px-[30px] py-[16px]">
                   <span className="leading-[100%] font-main-text font-semibold text-2xl">
@@ -153,6 +156,7 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
             <p>Konferensiya haqida ma&apos;lumot</p>
             <div className="flex flex-col gap-y-3">
               <p className="text-lg text-justify">{conference.description}</p>
+              <a href={'/conference.pdf'} target={"_blank"} className={"hover:underline text-blue-500"}>Konferensiya haqida to&apos;liq</a>
             </div>
             <p>Manzil: {conference.address}</p>
           </div>
