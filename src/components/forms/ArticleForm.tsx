@@ -256,10 +256,10 @@ const ArticleForm = ({ name, id, direction }: Props) => {
               name="description"
               render={({field}) => (
                   <FormItem>
-                    <FormLabel>Tavsif</FormLabel>
+                    <FormLabel>Annotatsiya</FormLabel>
                     <FormControl>
                       <Textarea
-                          placeholder="Qisqacha tavsif yozing"
+                          placeholder="Iqtisodiyotining rivojlanishi bilan bog'liq jarayonlarni o'rganadi...."
                           className="resize-none border-[1px] border-solid border-violet-200"
                           {...field}
                       />

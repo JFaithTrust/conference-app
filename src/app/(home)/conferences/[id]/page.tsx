@@ -146,8 +146,8 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
               </ul>
             </div>
             <div className="flex flex-col gap-y-3">
-              <p className="text-xl font-semibold">
-                ANJUMANDA ISHTIROK ETISH TARTIBI:
+              <p>
+                Anjumanda ishtirok etish tartibi:
               </p>
               <p className="text-lg text-justify">{conference.requirements}</p>
             </div>
@@ -156,7 +156,11 @@ const ConferenceDetail = ({ params }: { params: { id: number } }) => {
             <p>Konferensiya haqida ma&apos;lumot</p>
             <div className="flex flex-col gap-y-3">
               <p className="text-lg text-justify">{conference.description}</p>
-              <a href={'/conference.pdf'} target={"_blank"} className={"hover:underline text-blue-500"}>Konferensiya haqida to&apos;liq</a>
+              <div className={"flex"}>
+                <p>Maqola chiqarilish narxi: <span>{conference.cost} so&apos;m</span></p>
+              </div>
+              <a href={'/conference.pdf'} target={"_blank"} className={"hover:underline text-blue-500"}>Konferensiya
+                haqida to&apos;liq</a>
             </div>
             <p>Manzil: {conference.address}</p>
           </div>

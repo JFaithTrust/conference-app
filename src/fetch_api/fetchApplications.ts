@@ -150,3 +150,16 @@ export const putApplicationPaymentStatus = async (
   );
   return data;
 };
+
+export const getApplicationPaymentLink = async ( applicationId: number) => {
+  const access_token = localStorage.getItem("access_token");
+  const { data } = await axios.get(
+      `/api/payment/redirect?amount=100000&applicationId=${applicationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+  );
+  return data;
+};

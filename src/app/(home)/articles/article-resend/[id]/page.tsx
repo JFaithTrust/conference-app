@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import CustomButton from "@/components/ui/CustomButton";
 import {AnswerType, ApplicationType, ConferenceType, DirectionType} from "@/types";
 import Loading from "@/app/(home)/home_components/loading/Loading";
-import {getApplicationById} from "@/fetch_api/fetchApplications";
+import {getApplicationById, getApplicationPaymentLink} from "@/fetch_api/fetchApplications";
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
@@ -16,10 +16,16 @@ import {ArticleFeedbackForm} from "@/components/forms";
 import {getAllAnswersByApplicationId} from "@/fetch_api/fetchAnswers";
 import {Badge} from "@/components/ui/badge";
 
+interface IPayment {
+    uniqueParam: string;
+    redirectUrl: string;
+}
+
 const ConferenceDetail = ({params}: { params: { id: number } }) => {
     const [application, setApplication] = useState<ApplicationType>();
     const [loading, setLoading] = useState(true);
     const [answers, setAnswers] = useState<AnswerType[]>([])
+    const [payment, setPayment] = useState({} as IPayment);
 
     const router = useRouter();
 
@@ -31,6 +37,8 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
         const getAllApplications = async () => {
             const application = await getApplicationById(params.id);
             setApplication(application);
+            const pay = await getApplicationPaymentLink(params.id);
+            setPayment(pay);
             setLoading(false);
         };
         getAllApplications();
@@ -78,21 +86,22 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                         <span>Tahrirchini javobi</span>
                         {answers
                             .sort((a, b) => {
-                                if (a.id>b.id)
+                                if (a.id > b.id)
                                     return -1
                                 else
                                     return 1
                             })
                             .map(answer => (
-                            <div
-                                key={answer.id}
-                                className={`${answer.status == "PENDING" ? "bg-typeyellow" : "bg-typegreen"} w-full py-6 px-5 rounded-xl text-white text-xl font-bold my-2 flex justify-between`}>
-                                <span>{answer.text}</span>
-                                <Badge className={`bg-white border-2 rounded-full hover:bg-white ${answer.status == "PENDING"? "text-typeyellow" : "text-typegreen"}`}>
-                                    {answer.status}
-                                </Badge>
-                            </div>
-                        ))}
+                                <div
+                                    key={answer.id}
+                                    className={`${answer.status == "PENDING" ? "bg-typeyellow" : "bg-typegreen"} w-full py-6 px-5 rounded-xl text-white text-xl font-bold my-2 flex justify-between`}>
+                                    <span>{answer.text}</span>
+                                    <Badge
+                                        className={`bg-white border-2 rounded-full hover:bg-white ${answer.status == "PENDING" ? "text-typeyellow" : "text-typegreen"}`}>
+                                        {answer.status}
+                                    </Badge>
+                                </div>
+                            ))}
                     </div>
                 ) : (
                     <></>
@@ -185,17 +194,28 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                             readOnly
                         />
                     </div>
-                    <div
-                        className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">
-                        <h2 className="text-3xl font-semibold">Maqolani jo&apos;natish</h2>
-                        <ArticleFeedbackForm
-                            name={application.conference.name}
-                            id={application.conference.id}
-                            direction={(application.direction !== undefined) ? [application.direction] : []}
-                            applicationId={application.id}
-                            thesisFileId={application.thesisFile?.id || 0}
-                        />
-                    </div>
+                    {
+                        application.status === "FEEDBACK"
+                            ? <div
+                                className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">
+                                <h2 className="text-3xl font-semibold">Maqolani jo&apos;natish</h2>
+                                <ArticleFeedbackForm
+                                    name={application.conference.name}
+                                    id={application.conference.id}
+                                    direction={(application.direction !== undefined) ? [application.direction] : []}
+                                    applicationId={application.id}
+                                    thesisFileId={application.thesisFile?.id || 0}
+                                />
+                            </div>
+                            : application.status === "ACCEPTED"
+                                ?
+                                <div>
+                                    <a href={payment.redirectUrl} className={"hover:underline text-blue-500"}>
+                                        Ushbu link orqali maqolani to&apos;lovini amalga oshirishingiz mumkin:
+                                    </a>
+                                </div>
+                                : null
+                    }
                 </div>
             )}
         </div>

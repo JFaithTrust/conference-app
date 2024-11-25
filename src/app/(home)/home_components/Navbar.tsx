@@ -133,12 +133,12 @@ const Navbar = () => {
                 Konferensiyalar
               </Link>
             </div>
-            <div className="flex flex-row items-center justify-start">
-              <div className="relative font-medium">Biz haqimizda</div>
-            </div>
-            <div className="flex flex-row items-center justify-start">
-              <div className="relative font-medium">Aloqa</div>
-            </div>
+            {/*<div className="flex flex-row items-center justify-start">*/}
+            {/*  <div className="relative font-medium">Biz haqimizda</div>*/}
+            {/*</div>*/}
+            {/*<div className="flex flex-row items-center justify-start">*/}
+            {/*  <div className="relative font-medium">Aloqa</div>*/}
+            {/*</div>*/}
           </div>
           <div className="shrink-0 flex flex-row items-center justify-between gap-2">
             <div className="rounded-lg shrink-0 flex flex-col items-center justify-end p-2.5">
