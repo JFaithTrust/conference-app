@@ -25,7 +25,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
     const [application, setApplication] = useState<ApplicationType>();
     const [loading, setLoading] = useState(true);
     const [answers, setAnswers] = useState<AnswerType[]>([])
-    // const [payment, setPayment] = useState({} as IPayment);
+    const [payment, setPayment] = useState({} as IPayment);
 
     const router = useRouter();
 
@@ -37,8 +37,8 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
         const getAllApplications = async () => {
             const application = await getApplicationById(params.id);
             setApplication(application);
-            // const pay = await getApplicationPaymentLink(params.id);
-            // setPayment(pay);
+            const pay = await getApplicationPaymentLink(params.id);
+            setPayment(pay);
             setLoading(false);
         };
         getAllApplications();
@@ -209,10 +209,10 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                             </div>
                             : application.status === "ACCEPTED"
                                 ?
-                                <div>
-                                    {/*<a href={payment.redirectUrl} className={"hover:underline text-blue-500"}>*/}
-                                    {/*    Ushbu link orqali maqolani to&apos;lovini amalga oshirishingiz mumkin:*/}
-                                    {/*</a>*/}
+                                <div className={"w-full flex justify-end"}>
+                                    <Button variant={"active"} className={"w-fit py-2 px-4"} onClick={() => router.push(payment.redirectUrl)}>
+                                        To&apos;lovni amalga oshirish
+                                    </Button>
                                 </div>
                                 : null
                     }
