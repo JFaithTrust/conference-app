@@ -152,11 +152,10 @@ const AcceptedArticle = ({ params }: { params: { id: number } }) => {
                 <div className="flex flex-row justify-between items-center w-full gap-x-3">
                   <Button
                     className="rounded-lg p-3 bg-white text-black border-[1px] border-solid hover:bg-slate-50 border-violet-200 w-full"
-                    onClick={() =>
-                      router.push(appData.thesisFile?.downloadLink || "")
-                    }
                   >
-                    <span>Yuklab olish</span>
+                    <a target={"_blank"} href={appData.thesisFile?.downloadLink}>
+                      Yuklab olish
+                    </a>
                   </Button>
                 </div>
               </div>

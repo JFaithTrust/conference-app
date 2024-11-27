@@ -94,7 +94,7 @@ const Sidebar = () => {
                   Konferensiya
                 </Button>
 
-                {isOpenConf && userRole === "SUPER_ADMIN" && (
+                {isOpenConf && (userRole === "SUPER_ADMIN" || userRole === "EDITOR") && (
                   <div
                     className={`bg-herowhite flex flex-col gap-y-2 px-5 py-2 rounded-b-xl`}
                   >
@@ -129,10 +129,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                href={`${
-                  userRole !== "SUPER_ADMIN"
-                    ? "/dashboard/articles/editor"
-                    : "/dashboard/articles"
+                href={`${(userRole === "SUPER_ADMIN" || userRole === "EDITOR")
+                    ? "/dashboard/articles"
+                    : "/dashboard/articles/editor"
                 }`}
                 prefetch={true}
               >
@@ -148,7 +147,7 @@ const Sidebar = () => {
                   Maqola
                 </Button>
 
-                {isOpenArt && userRole === "SUPER_ADMIN" && (
+                {isOpenArt && (userRole === "SUPER_ADMIN" || userRole === "EDITOR") && (
                   <div
                     className={`bg-herowhite flex flex-col gap-y-2 px-5 py-2 rounded-b-xl`}
                   >
@@ -192,7 +191,7 @@ const Sidebar = () => {
                 )}
               </Link>
             </li>
-            {userRole === "SUPER_ADMIN" && (
+            {(userRole === "SUPER_ADMIN" || userRole === "EDITOR") && (
               <>
                 <li>
                   <Link href="/dashboard/reviewers" prefetch={true}>
@@ -209,21 +208,23 @@ const Sidebar = () => {
                     </Button>
                   </Link>
                 </li>
-                <li>
-                  <Link href="/dashboard/users" prefetch={true}>
-                    <Button
-                      className={`gap-4 w-[180px] font-roboto text-lg justify-start pl-[18px] py-[6px] ${
-                        pathname.startsWith("/dashboard/users")
-                          ? "bg-admingreen border-none hover:bg-admingreen/85 text-white"
-                          : "bg-transparent text-admingreen hover:text-admingreen/85 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80"
-                      }`}
-                      onClick={() => toggleLink(4)}
-                    >
-                      <FaRegUser />
-                      Foydalanuvchi
-                    </Button>
-                  </Link>
-                </li>
+                { userRole === "SUPER_ADMIN" &&
+                  <li>
+                    <Link href="/dashboard/users" prefetch={true}>
+                      <Button
+                          className={`gap-4 w-[180px] font-roboto text-lg justify-start pl-[18px] py-[6px] ${
+                              pathname.startsWith("/dashboard/users")
+                                  ? "bg-admingreen border-none hover:bg-admingreen/85 text-white"
+                                  : "bg-transparent text-admingreen hover:text-admingreen/85 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80"
+                          }`}
+                          onClick={() => toggleLink(4)}
+                      >
+                        <FaRegUser/>
+                        Foydalanuvchi
+                      </Button>
+                    </Link>
+                  </li>
+                }
               </>
             )}
           </ul>

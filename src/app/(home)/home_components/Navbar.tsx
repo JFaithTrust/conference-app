@@ -74,6 +74,7 @@ const Navbar = () => {
     if (typeof window !== "undefined") {
       window.localStorage.removeItem("access_token");
       setIsAuth(false);
+      router.push("/");
     }
   };
 
@@ -219,7 +220,7 @@ const Navbar = () => {
                       </SheetContent>
                     </Sheet>
                     {(role.length > 0 && role === "SUPER_ADMIN") ||
-                    (role.length > 0 && role === "REVIEWER") ? (
+                    (role.length > 0 && role === "REVIEWER") || (role.length > 0 && role === "EDITOR") ? (
                       <Button
                         onClick={() => router.push("/dashboard")}
                         className="p-2.5 rounded text-sm flex flex-row gap-x-2 bg-mainindigo text-mainwhite hover:bg-mainindigo/85 transition-all duration-200 ease-in-out w-full"

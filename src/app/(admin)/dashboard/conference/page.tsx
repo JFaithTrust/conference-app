@@ -98,12 +98,12 @@ const Conference = () => {
       <div className="flex flex-col gap-y-[18px] px-[30px]">
         <div
           className={`flex items-center py-4 ${
-            userRole !== "SUPER_ADMIN" ? "justify-end" : "justify-between"
+              (userRole === "SUPER_ADMIN" || userRole === "EDITOR") ? "justify-between" : "justify-end"
           }`}
         >
           <Button
             className={`bg-white text-typeblue hover:bg-white/90 px-[30px] py-[12px] ${
-              userRole !== "SUPER_ADMIN" ? "hidden" : ""
+                (userRole === "SUPER_ADMIN" || userRole === "EDITOR") ? "" : "hidden"
             }`}
             onClick={() =>
               router.push("/dashboard/conference/conference-create")
@@ -170,9 +170,7 @@ const Conference = () => {
                         </span>
                         <div
                           className={`lowercase flex flex-row w-[130px] gap-x-2 items-center ${
-                            userRole !== "SUPER_ADMIN"
-                              ? "justify-center"
-                              : "justify-start"
+                              (userRole === "SUPER_ADMIN" || userRole === "EDITOR") ? "justify-start" : "justify-center"
                           }`}
                         >
                           <Button
@@ -185,7 +183,7 @@ const Conference = () => {
                           >
                             <FaEye size={22} className="text-typeblue" />
                           </Button>
-                          {userRole === "SUPER_ADMIN" && (
+                          {(userRole === "SUPER_ADMIN" || userRole === "EDITOR") && (
                             <>
                               <Button
                                 variant="ghost"

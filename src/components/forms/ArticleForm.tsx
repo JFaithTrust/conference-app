@@ -273,11 +273,11 @@ const ArticleForm = ({ name, id, direction }: Props) => {
               <a href={'/namuna.pdf'} target={"_blank"} className={"hover:underline text-blue-500"}>Maqola namunasi</a>
               <div
                   className="flex flex-col p-[18px] bg-mainwhite gap-6 rounded-xl border-[1px] border-solid border-violet-200">
-                <h3 className="text-center text-sm leading-[100%] font-normal font-main-text">
-                  {selectedFile ? `Tanlangan fayl` : "Fayl yuklash"}
+                <h3 className="text-center text-xs leading-[100%] font-normal font-main-text">
+                  {selectedFile ? `Tanlangan fayl` : "Fayl hajmi 10MB dan oshmasligi kerak"}
                 </h3>
                 <label
-                    className="cursor-pointer rounded-xl bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
+                    className="cursor-pointer rounded-xl text-center bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
                   {!selectedFile ? (
                       "Yuklash"
                   ) : loading ? (
@@ -286,6 +286,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
                       `${selectedFile}`
                   )}
                   <Input
+                      accept={"application/pdf"}
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
