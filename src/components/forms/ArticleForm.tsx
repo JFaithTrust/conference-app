@@ -270,7 +270,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
           />
           <div className="flex justify-between items-center">
             <div className={"flex flex-col gap-y-2 items-center"}>
-              <a href={'/namuna.pdf'} target={"_blank"} className={"hover:underline text-blue-500"}>Maqola namunasi</a>
+              <a href={'/namuna.docx'} target={"_blank"} className={"hover:underline text-blue-500"}>Maqola namunasi</a>
               <div
                   className="flex flex-col p-[18px] bg-mainwhite gap-6 rounded-xl border-[1px] border-solid border-violet-200">
                 <h3 className="text-center text-xs leading-[100%] font-normal font-main-text">
