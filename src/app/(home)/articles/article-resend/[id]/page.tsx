@@ -144,9 +144,9 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                         </div>
                     </div>
                     <div className="flex flex-col gap-y-2">
-            <span className="text-xl font-semibold font-source-serif-pro">
-              Maqola aftorlari :{" "}
-            </span>
+                        <span className="text-xl font-semibold font-source-serif-pro">
+                          Maqola aftorlari :{" "}
+                        </span>
                         <span>{application.authors}</span>
                     </div>
                     <div className="flex flex-row justify-between">
@@ -169,9 +169,9 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
 
                         <div
                             className="flex flex-col px-[12px] py-1.5 gap-y-1 bg-herowhite rounded-xl border-[1px] border-solid border-[#DEDBFF] items-center">
-              <span className="font-semibold font-source-serif-pro text-lg">
-                Faylni yuklab olish
-              </span>
+                          <span className="font-semibold font-source-serif-pro text-lg">
+                            Faylni yuklab olish
+                          </span>
                             <div className="flex flex-row justify-between items-center w-full gap-x-3">
                                 <Button
                                     className="rounded-lg p-3 bg-white text-black border-[1px] border-solid hover:bg-slate-50 border-violet-200 w-full"

@@ -286,7 +286,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
                       `${selectedFile}`
                   )}
                   <Input
-                      accept={"application/pdf"}
+                      accept={".docx"}
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
