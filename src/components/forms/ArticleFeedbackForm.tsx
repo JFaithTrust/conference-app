@@ -64,15 +64,7 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
     const file: File = (target.files as FileList)[0];
 
     // Validate file type and size
-    const allowedTypes = ["application/pdf"]; // Add allowed file types
     const maxSize = 10 * 1024 * 1024; // 10MB maximum file size
-
-    if (!allowedTypes.includes(file.type)) {
-      return toast({
-        title: "Fayl turi noto'g'ri! Iltimos pdf formatda yuklang.",
-        variant: "destructive",
-      });
-    }
 
     if (file.size > maxSize) {
       return toast({
@@ -273,29 +265,33 @@ const ArticleFeedbackForm = ({ name, id, direction, applicationId, thesisFileId 
             )}
           />
           <div className="flex justify-between items-center">
-            <div className="flex flex-col p-[18px] bg-mainwhite gap-6 rounded-xl border-[1px] border-solid border-violet-200">
+            <a href={'/namuna.docx'} target={"_blank"} className={"hover:underline text-blue-500"}>Maqola namunasi</a>
+            <div
+                className="flex flex-col p-[18px] bg-mainwhite gap-6 rounded-xl border-[1px] border-solid border-violet-200">
               <h3 className="text-center text-sm leading-[100%] font-normal font-main-text">
-                {selectedFile ? `Tanlangan fayl` : "Fayl yuklash"}
+                {selectedFile ? `Tanlangan fayl` : "Fayl hajmi 10MB dan oshmasligi kerak"}
               </h3>
-              <label className="cursor-pointer rounded-xl bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
+              <label
+                  className="cursor-pointer rounded-xl bg-typeyellow py-[12px] px-[48px] font-normal text-mainwhite font-main-text leading-[100%] text-lg">
                 {!selectedFile
-                  ? "Yuklash"
-                  : loading
-                  ? "Yuklanyapti..."
-                  : `${selectedFile}`}
+                    ? "Yuklash"
+                    : loading
+                        ? "Yuklanyapti..."
+                        : `${selectedFile}`}
                 <Input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
+                    accept={".docx"}
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
                 />
               </label>
             </div>
 
             <CustomButton
-              disabled={isSubmitting}
-              label={"Submit"}
-              success
-              classNames="px-[48px] py-[12px] rounded-[19px]"
+                disabled={isSubmitting}
+                label={"Submit"}
+                success
+                classNames="px-[48px] py-[12px] rounded-[19px]"
             />
           </div>
         </form>
