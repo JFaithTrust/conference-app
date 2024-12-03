@@ -59,15 +59,7 @@ const ArticleForm = ({ name, id, direction }: Props) => {
     const file: File = (target.files as FileList)[0];
 
     // Validate file type and size
-    const allowedTypes = ["application/pdf"]; // Add allowed file types
     const maxSize = 10 * 1024 * 1024; // 10MB maximum file size
-
-    if (!allowedTypes.includes(file.type)) {
-      return toast({
-        title: "Fayl turi noto'g'ri! Iltimos pdf formatda yuklang.",
-        variant: "destructive",
-      });
-    }
 
     if (file.size > maxSize) {
       return toast({
