@@ -169,7 +169,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={'/conference.pdf'} target={"_blank"}
+                                        <a href={'/conference-article.pdf'} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
