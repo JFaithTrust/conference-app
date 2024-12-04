@@ -107,7 +107,7 @@ const NewArticles = () => {
         const apps: any = [];
         selectedApplications.forEach((a) => {
           const app = applications.find(
-            (app) => app.name.toLocaleLowerCase() === a
+            (app) => app.name.toLocaleLowerCase().trim() === a
           );
           apps.push({
             id: app?.id,
@@ -170,7 +170,7 @@ const NewArticles = () => {
                         );
                       }}
                     >
-                      {selectedApplications.includes(a.name.toLowerCase()) && (
+                      {selectedApplications.includes(a.name.toLowerCase().trim()) && (
                         <Check className="mr-2 h-4 w-4 opacity-100" />
                       )}
                       {a.name}
