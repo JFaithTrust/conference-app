@@ -191,28 +191,28 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                             readOnly
                         />
                     </div>
-                    {
-                        application.status === "FEEDBACK"
-                            ? <div
-                                className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">
-                                <h2 className="text-3xl font-semibold">Maqolani jo&apos;natish</h2>
-                                <ArticleFeedbackForm
-                                    name={application.conference.name}
-                                    id={application.conference.id}
-                                    direction={(application.direction !== undefined) ? [application.direction] : []}
-                                    applicationId={application.id}
-                                    thesisFileId={application.thesisFile?.id || 0}
-                                />
-                            </div>
-                            : application.status === "ACCEPTED"
-                                ?
-                                <div className={"w-full flex justify-end"}>
-                                    <Button variant={"active"} className={"w-fit py-2 px-4"} onClick={() => router.push(payment.redirectUrl)}>
-                                        To&apos;lovni amalga oshirish
-                                    </Button>
-                                </div>
-                                : null
-                    }
+                    {/*{*/}
+                    {/*    application.status === "FEEDBACK"*/}
+                    {/*        ? <div*/}
+                    {/*            className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">*/}
+                    {/*            <h2 className="text-3xl font-semibold">Maqolani jo&apos;natish</h2>*/}
+                    {/*            <ArticleFeedbackForm*/}
+                    {/*                name={application.conference.name}*/}
+                    {/*                id={application.conference.id}*/}
+                    {/*                direction={(application.direction !== undefined) ? [application.direction] : []}*/}
+                    {/*                applicationId={application.id}*/}
+                    {/*                thesisFileId={application.thesisFile?.id || 0}*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*        : application.status === "ACCEPTED"*/}
+                    {/*            ?*/}
+                    {/*            <div className={"w-full flex justify-end"}>*/}
+                    {/*                <Button variant={"active"} className={"w-fit py-2 px-4"} onClick={() => router.push(payment.redirectUrl)}>*/}
+                    {/*                    To&apos;lovni amalga oshirish*/}
+                    {/*                </Button>*/}
+                    {/*            </div>*/}
+                    {/*            : null*/}
+                    {/*}*/}
                 </div>
             )}
         </div>
