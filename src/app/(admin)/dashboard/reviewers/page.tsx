@@ -51,7 +51,7 @@ const Reviewers = () => {
 
   useEffect(() => {
     window.setTimeout(() => {
-      if(userAddModal.isOpen === true) {
+      if(userAddModal.isOpen) {
         const getUsers = async () => {
           const users = await getAllUsers("USER");
           setAllUsers(users);

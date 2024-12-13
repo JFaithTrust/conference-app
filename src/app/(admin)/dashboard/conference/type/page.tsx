@@ -70,7 +70,7 @@ const ConferenceType = () => {
     // waiting time
     window.setTimeout(() => {
       if (directionId) {
-        if (userAddModal.isOpen === true) {
+        if (userAddModal.isOpen) {
           const getData = async () => {
             const data = await getUserByDirectionId(directionId);
             const reviewers = await getAllUsers("REVIEWER");
@@ -410,7 +410,7 @@ const ConferenceType = () => {
         <div className="flex items-center py-4 justify-end">
           {allDirections.length > directionPerPage && (
             <CustomPagination
-              totalPosts={reviewers.length}
+              totalPosts={allDirections.length}
               postsPerPage={directionPerPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
