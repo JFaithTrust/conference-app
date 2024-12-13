@@ -1,69 +1,71 @@
-import { ReactNode } from "react";
+import {ReactNode} from "react";
 
 export interface ChildProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
-export interface ConferenceType{
-  id: number;
-  name: string;
-  startsAt: string;
-  endsAt: string | Date;
-  deadlineForThesis: string;
-  cost?: string;
-  description?: string;
-  address?: string;
-  requirements?: string;
-  newApplicationsCount?: number;
-  owner?: {
+export interface ConferenceType {
     id: number;
-    fullName: string;
-    email: string;
-    username: string;
-    role: string;
-    phoneNumber: string;
-  }
+    name: string;
+    startsAt: string;
+    endsAt: string | Date;
+    deadlineForThesis: string;
+    cost?: string;
+    description?: string;
+    address?: string;
+    requirements?: string;
+    newApplicationsCount?: number;
+    owner?: {
+        id: number;
+        fullName: string;
+        email: string;
+        username: string;
+        role: string;
+        phoneNumber: string;
+    }
 }
 
 export interface UserType {
-  id: number;
-  fullName: string;
-  email?: string;
-  phoneNumber: string;
-  userStatus: "ACTIVE" | "INACTIVE";
+    id: number;
+    fullName: string;
+    email?: string;
+    phoneNumber: string;
+    userStatus: "ACTIVE" | "INACTIVE";
 }
 
 export interface DirectionType {
-  id: number;
-  name: string;
-  newApplicationsCount?: number;
+    id: number;
+    name: string;
+    newApplicationsCount?: number;
 }
 
 export interface File {
-  id: number;
-  downloadLink: string;
+    id: number;
+    downloadLink: string;
 }
 
 export interface ApplicationType {
-  id: number;
-  name: string;
-  description?: string;
-  authors?: string;
-  status: "NEW" | "ACCEPTED" | "FEEDBACK" | "REJECTED" | "PENDING";
-  paymentStatus: "PAID" | "UNPAID"
-  thesisFile?: File;
-  owner: UserType;
-  reviewer: UserType;
-  conference: ConferenceType;
-  direction?: DirectionType;
-  createdAt?: string | Date;
-  updatedAt?: Date;
+    id: number;
+    name: string;
+    description?: string;
+    authors?: string;
+    status: "NEW" | "ACCEPTED" | "FEEDBACK" | "REJECTED" | "PENDING";
+    paymentStatus: "PAID" | "UNPAID"
+    thesisFile?: File;
+    owner: UserType;
+    reviewer: UserType;
+    conference: ConferenceType;
+    direction?: DirectionType;
+    createdAt?: string | Date;
+    updatedAt?: Date;
+    doi?: string;
+    pages?: string;
 }
 
 
 export interface AnswerType {
-  id: number;
-  text: string;
-  application: ApplicationType;
-  status: "ANSWERED" | "PENDING";
+    id: number;
+    text: string;
+    application: ApplicationType;
+    status: "ANSWERED" | "PENDING";
 }

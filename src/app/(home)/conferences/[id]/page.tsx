@@ -90,18 +90,22 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                     <h1 className="text-3xl font-semibold leading-[100%] font-source-serif-pro text-center">
                         {conference.name}
                     </h1>
-                    <div className={"flex flex-col gap-y-2 justify-end"}>
-                        <h3 className="text-sm font-normal">Ro&apos;yhatdan o&apos;tish vaqti</h3>
-                        <div className="flex flex-row justify-between items-center">
-                            <h2 className="text-3xl font-medium leading-[100%] font-roboto border-[1px] border-solid border-violet-200 px-[30px] py-[16px] rounded-md">
-                                {formatDate(conference.deadlineForThesis, false)}
-                            </h2>
-                            <CountdownTimer
-                                targetDate={conference.deadlineForThesis}
-                                classNames="border-[1px] border-solid border-violet-200 text-3xl"
-                            />
-                        </div>
-                    </div>
+                    {
+                        new Date(conference.deadlineForThesis) > new Date() && (
+                            <div className={"flex flex-col gap-y-2 justify-end"}>
+                                <h3 className="text-sm font-normal">Ro&apos;yhatdan o&apos;tish vaqti</h3>
+                                <div className="flex flex-row justify-between items-center">
+                                    <h2 className="text-3xl font-medium leading-[100%] font-roboto border-[1px] border-solid border-violet-200 px-[30px] py-[16px] rounded-md">
+                                        {formatDate(conference.deadlineForThesis, false)}
+                                    </h2>
+                                    <CountdownTimer
+                                        targetDate={conference.deadlineForThesis}
+                                        classNames="border-[1px] border-solid border-violet-200 text-3xl"
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
                     <div className="flex flex-row justify-between items-center">
                         <div className="flex flex-col p-3 gap-y-1">
                             <h3 className="text-sm font-normal">Konferensiya boshlanish vaqti</h3>
@@ -211,7 +215,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                     )}
 
                     {/*<div style={{position: "relative"}}>*/}
-                    {/*    {isAuth !== true && (*/}W
+                    {/*    {!isAuth && (*/}
                     {/*        <div*/}
                     {/*            className={`flex items-center justify-center bg-black/30 rounded-xl absolute top-0 left-0 w-full h-full`}*/}
                     {/*        >*/}

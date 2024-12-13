@@ -38,15 +38,18 @@ const Conference = () => {
     if (localStorage.getItem("role")) {
       setuserRole(localStorage.getItem("role") || "");
     }
-    try {
-      const getConferences = async () => {
-        const data = await getAllConferences();
-        setAllConferences(data);
+    if(localStorage.getItem("access_token")){
+      const token = localStorage.getItem("access_token");
+      axios.get("/api/conference/all", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => {
+        setAllConferences(res.data);
         setLoading(false);
-      };
-      getConferences();
-    } catch (error) {
-      console.log("Error in fetching conferences", error);
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }, []);
 

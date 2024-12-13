@@ -41,6 +41,14 @@ export const createPostSchema = z.object({
   description: z.string().nonempty("Iltimos izoh qoldiring."),
 });
 
+export const AddDOIFormSchema = z.object({
+    doi: z.string().min(1),
+});
+
+export const AddPageNumberFormSchema = z.object({
+  pages: z.string().min(1),
+});
+
 export const userAddSchema = z.object({
   users: z.array(z.string()).nonempty("Iltimos foydalanuvchilarni tanlang."),
 });

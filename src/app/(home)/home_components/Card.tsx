@@ -25,21 +25,27 @@ const Card = ({ item, loading }: Props) => {
 
   return (
     <div className="rounded-3xl [background:linear-gradient(151.61deg,_rgba(255,_255,_255,_0.6),_rgba(255,_255,_255,_0))] shadow-[-5px_-5px_250px_rgba(255,_255,_255,_0.05)_inset] [backdrop-filter:blur(66.2px)] box-border w-[325px] overflow-hidden shrink-0 flex flex-col items-start justify-center p-[18px] gap-[12px] border-[3px] border-solid border-mainindigo/70">
-      <div className="self-stretch flex flex-row items-center justify-between">
-        <div className="rounded-lg overflow-hidden flex flex-col items-center justify-center py-2.5 px-1.5">
-          <div className="relative leading-[100%]">
-            {formatDate(item.deadlineForThesis, false)}
-          </div>
+        {
+            new Date(item.deadlineForThesis) > new Date() && (
+                <div className="self-stretch flex flex-row items-center justify-between">
+                    <div className="rounded-lg overflow-hidden flex flex-col items-center justify-center py-2.5 px-1.5">
+                        <div className="relative leading-[100%]">
+                            {formatDate(item.deadlineForThesis, false)}
+                        </div>
+                    </div>
+                    <CountDownConference targetDate={item.deadlineForThesis}/>
+                </div>
+            )
+        }
+        <div className="self-stretch flex flex-col items-start justify-center p-[5px] gap-[12px] text-center">
+            <b className="self-stretch relative leading-[120%]">{item.name}</b>
+            <div
+                className="self-stretch relative text-sm leading-[120%] text-justify line-clamp-6 text-ellipsis overflow-hidden">
+                {item.description}
+            </div>
         </div>
-        <CountDownConference targetDate={item.deadlineForThesis} />
-      </div>
-      <div className="self-stretch flex flex-col items-start justify-center p-[5px] gap-[12px] text-center">
-        <b className="self-stretch relative leading-[120%]">{item.name}</b>
-        <div className="self-stretch relative text-sm leading-[120%] text-justify line-clamp-6 text-ellipsis overflow-hidden">
-          {item.description}
-        </div>
-      </div>
-      <div className="rounded-md flex flex-row items-center justify-start gap-[10px] text-justify text-sm text-mainindigo/95">
+        <div
+            className="rounded-md flex flex-row items-center justify-start gap-[10px] text-justify text-sm text-mainindigo/95">
         <FaLocationDot className="w-5 h-[25px] object-cover text-typered" />
         <div className="leading-[120%]">
           <span>Manzil: </span>

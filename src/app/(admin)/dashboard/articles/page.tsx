@@ -33,6 +33,7 @@ import {
 } from "@/types";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import axios from "@/fetch_api/axios";
 
 const NewArticles = () => {
   const [open, setOpen] = useState(false);
@@ -51,12 +52,25 @@ const NewArticles = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getAllData = async () => {
-      const conferences = await getAllConferences();
-      setAllConferences(conferences);
-      setLoading(false);
-    };
-    getAllData();
+    // const getAllData = async () => {
+    //   const conferences = await getAllConferences();
+    //   setAllConferences(conferences);
+    //   setLoading(false);
+    // };
+    // getAllData();
+    if(localStorage.getItem("access_token")){
+      const token = localStorage.getItem("access_token");
+      axios.get("/api/conference/all", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => {
+        setAllConferences(res.data);
+        setLoading(false);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
   }, []);
 
   useEffect(() => {

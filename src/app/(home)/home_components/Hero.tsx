@@ -4,18 +4,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import CountdownTimer from "./CountdownTimer";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ConferenceType } from "@/types";
-import { getAllConferences } from "@/fetch_api/fetchConference";
+import {getAllConferences, getAllLandingConferences} from "@/fetch_api/fetchConference";
 import { formatDate } from "@/functions/formats";
 import CarouselSkeleton from "./skeleton/CarouselSkeleton";
+import CountDownConference from "@/app/(home)/home_components/count-down-for-conference/CountDownConference";
 
 const Hero = () => {
   const [heroData, setHeroData] = useState<ConferenceType[]>([]);
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     const getConferences = async () => {
-      const res = await getAllConferences();
+      const res = await getAllLandingConferences();
       setHeroData(res.slice(res.length - 3, res.length));
       setLoading(false)
     };
@@ -82,21 +83,27 @@ const Hero = () => {
                 <div className="relative leading-[120%] font-righteous text-gray-500 flex items-center w-[696px] h-[136px] shrink-0">
                   {slide.name}
                 </div>
-                <div className="overflow-hidden flex flex-col items-center justify-center py-3 px-1">
-                  <div className="relative leading-[100%] font-medium">
-                    {formatDate(slide.deadlineForThesis, false)}
-                  </div>
-                </div>
-                <CountdownTimer
-                  targetDate={slide.deadlineForThesis}
-                  shadowColor={slide.shadowColor}
-                />
+                {
+                    new Date(slide.deadlineForThesis) > new Date(
+                        <>
+                          <div className="overflow-hidden flex flex-col items-center justify-center py-3 px-1">
+                            <div className="relative leading-[100%] font-medium">
+                              {formatDate(slide.deadlineForThesis, false)}
+                            </div>
+                          </div>
+                          <CountdownTimer
+                              targetDate={slide.deadlineForThesis}
+                              shadowColor={slide.shadowColor}
+                          />
+                        </>
+                    )
+                }
               </div>
               <div className="flex flex-col items-start justify-start p-2.5 ml-[-50px]">
                 <img
-                  className="relative w-[650px] h-[433.3px] object-cover"
-                  alt=""
-                  src={slide.urlImage}
+                    className="relative w-[650px] h-[433.3px] object-cover"
+                    alt=""
+                    src={slide.urlImage}
                 />
               </div>
             </div>

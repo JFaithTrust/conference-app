@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ConferenceType } from "@/types";
-import { getAllConferences } from "@/fetch_api/fetchConference";
+import {getAllConferences, getAllLandingConferences} from "@/fetch_api/fetchConference";
 import { Conference, Hero } from "./home_components";
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     const getConferences = async () => {
-      const res = await getAllConferences();
+      const res = await getAllLandingConferences();
       setCard(res.slice(0, 8));
       setLoading(false)
     };
