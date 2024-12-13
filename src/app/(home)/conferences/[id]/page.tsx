@@ -210,33 +210,33 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                         </>
                     )}
 
-                    <div style={{position: "relative"}}>
-                        {isAuth !== true && (
-                            <div
-                                className={`flex items-center justify-center bg-black/30 rounded-xl absolute top-0 left-0 w-full h-full`}
-                            >
-                                <CustomButton
-                                    label="Ro'yxatdan o'tish"
-                                    onClick={onOpenRegisterModal}
-                                    mainable
-                                    outlined
-                                    classNames="px-[40px] py-[20px] font-bold text-2xl rounded-[5px] bg-transparent border-[5px] border-solid"
-                                />
-                            </div>
-                        )}
+                    {/*<div style={{position: "relative"}}>*/}
+                    {/*    {isAuth !== true && (*/}W
+                    {/*        <div*/}
+                    {/*            className={`flex items-center justify-center bg-black/30 rounded-xl absolute top-0 left-0 w-full h-full`}*/}
+                    {/*        >*/}
+                    {/*            <CustomButton*/}
+                    {/*                label="Ro'yxatdan o'tish"*/}
+                    {/*                onClick={onOpenRegisterModal}*/}
+                    {/*                mainable*/}
+                    {/*                outlined*/}
+                    {/*                classNames="px-[40px] py-[20px] font-bold text-2xl rounded-[5px] bg-transparent border-[5px] border-solid"*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*    )}*/}
 
-                        <div
-                            className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">
-                            <h2 className="text-3xl font-semibold">
-                                Maqolani jo&apos;natish
-                            </h2>
-                            <ArticleForm
-                                name={conference.name}
-                                id={conference.id}
-                                direction={direction}
-                            />
-                        </div>
-                    </div>
+                    {/*    <div*/}
+                    {/*        className="flex flex-col rounded-xl p-[30px] gap-y-[30px] border-[1px] border-solid border-violet-200">*/}
+                    {/*        <h2 className="text-3xl font-semibold">*/}
+                    {/*            Maqolani jo&apos;natish*/}
+                    {/*        </h2>*/}
+                    {/*        <ArticleForm*/}
+                    {/*            name={conference.name}*/}
+                    {/*            id={conference.id}*/}
+                    {/*            direction={direction}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
             )}
         </div>
