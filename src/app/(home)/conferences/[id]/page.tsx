@@ -96,7 +96,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                 <h3 className="text-sm font-normal">Ro&apos;yhatdan o&apos;tish vaqti</h3>
                                 <div className="flex flex-row justify-between items-center">
                                     <h2 className="text-3xl font-medium leading-[100%] font-roboto border-[1px] border-solid border-violet-200 px-[30px] py-[16px] rounded-md">
-                                        {formatDate(conference.deadlineForThesis, false)}
+                                        {format(conference.deadlineForThesis, "dd.MM.yyyy")}
                                     </h2>
                                     <CountdownTimer
                                         targetDate={conference.deadlineForThesis}
@@ -113,7 +113,8 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                 <div
                                     className="border-[1px] border-solid border-violet-200 rounded-md px-[30px] py-[16px]">
                   <span className="leading-[100%] font-main-text font-semibold text-2xl">
-                    {formatDate(conference.startsAt, true)}
+                    {/*{formatDate(conference.startsAt, true)}*/}
+                      {format(conference.startsAt, "dd.MM.yyyy")}
                   </span>
                                 </div>
                                 <div
@@ -174,6 +175,15 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
                                         <a href={'/conference-article.pdf'} target={"_blank"}
+                                        >Yuklab olish</a>
+                                    </Button>
+                                </div>
+                                <div className={"flex flex-col gap-y-1 items-center"}>
+                                    <span>Konferensiya Dasturi </span>
+                                    <Button
+                                        className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
+                                    >
+                                        <a href={'/conf_app.pdf'} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>

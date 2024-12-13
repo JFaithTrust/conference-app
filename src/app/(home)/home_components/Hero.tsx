@@ -84,7 +84,7 @@ const Hero = () => {
                   {slide.name}
                 </div>
                 {
-                    new Date(slide.deadlineForThesis) > new Date(
+                    new Date(slide.deadlineForThesis) > new Date && (
                         <>
                           <div className="overflow-hidden flex flex-col items-center justify-center py-3 px-1">
                             <div className="relative leading-[100%] font-medium">
