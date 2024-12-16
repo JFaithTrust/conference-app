@@ -200,29 +200,29 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                         </div>
                         <p>Manzil: {conference.address}</p>
                     </div>
-                    {applications.length > 0 && (
-                        <>
-                            <p className="text-xl font-semibold">Qabul qilingan maqolalar</p>
-                            <div className="flex flex-col gap-y-2">
-                                {applications.map((item) => (
-                                    <div
-                                        className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center"
-                                        key={item.id}
-                                    >
-                                        <h2 className="w-[200px] truncate overflow-hidden">{item.name}</h2>
-                                        <h2 className="w-[200px] truncate overflow-hidden">{item.owner?.fullName}</h2>
-                                        <h3 className="w-[100px]">{format(item.updatedAt || new Date, "dd-MM-yyyy")}</h3>
-                                        <Button
-                                            className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85"
-                                            onClick={() => router.push(item.thesisFile?.downloadLink || "")}
-                                        >
-                                            Yuklab olish
-                                        </Button>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    )}
+                    {/*{applications.length > 0 && (*/}
+                    {/*    <>*/}
+                    {/*        <p className="text-xl font-semibold">Qabul qilingan maqolalar</p>*/}
+                    {/*        <div className="flex flex-col gap-y-2">*/}
+                    {/*            {applications.map((item) => (*/}
+                    {/*                <div*/}
+                    {/*                    className="flex flex-row border-[1px] border-solid border-violet-200 rounded-md justify-between p-[12px] items-center"*/}
+                    {/*                    key={item.id}*/}
+                    {/*                >*/}
+                    {/*                    <h2 className="w-[200px] truncate overflow-hidden">{item.name}</h2>*/}
+                    {/*                    <h2 className="w-[200px] truncate overflow-hidden">{item.owner?.fullName}</h2>*/}
+                    {/*                    <h3 className="w-[100px]">{format(item.updatedAt || new Date, "dd-MM-yyyy")}</h3>*/}
+                    {/*                    <Button*/}
+                    {/*                        className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85"*/}
+                    {/*                        onClick={() => router.push(item.thesisFile?.downloadLink || "")}*/}
+                    {/*                    >*/}
+                    {/*                        Yuklab olish*/}
+                    {/*                    </Button>*/}
+                    {/*                </div>*/}
+                    {/*            ))}*/}
+                    {/*        </div>*/}
+                    {/*    </>*/}
+                    {/*)}*/}
 
                     {/*<div style={{position: "relative"}}>*/}
                     {/*    {!isAuth && (*/}
