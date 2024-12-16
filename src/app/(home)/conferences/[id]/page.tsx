@@ -174,25 +174,29 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={'/conference-article.pdf'} target={"_blank"}
+                                        <a href={params.id === 1 ? '/conference-article.pdf' : "/axborot_xati.doc"} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
-                                <div className={"flex flex-col gap-y-1 items-center"}>
-                                    <span>Konferensiya Dasturi </span>
-                                    <Button
-                                        className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
-                                    >
-                                        <a href={'/conf_app.pdf'} target={"_blank"}
-                                        >Yuklab olish</a>
-                                    </Button>
-                                </div>
+                                {
+                                    params.id === 1 && (
+                                        <div className={"flex flex-col gap-y-1 items-center"}>
+                                            <span>Konferensiya Dasturi </span>
+                                            <Button
+                                                className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
+                                            >
+                                                <a href={'/conf_app.pdf'} target={"_blank"}
+                                                >Yuklab olish</a>
+                                            </Button>
+                                        </div>
+                                    )
+                                }
                                 <div className={"flex flex-col gap-y-1"}>
                                     <span>Maqola namunasi</span>
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={'/namuna.docx'} target={"_blank"}
+                                        <a href={params.id === 1 ? '/namuna.docx' : "/namuna_2.docx"} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
