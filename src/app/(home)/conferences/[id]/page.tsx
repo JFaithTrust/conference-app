@@ -174,7 +174,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={params.id === 1 ? '/conference-article.pdf' : "/axborot_xati.doc"} target={"_blank"}
+                                        <a href={params.id === 1 ? '/conference-article.pdf' : "/axborot_xati_new.pdf"} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
