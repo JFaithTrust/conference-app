@@ -174,7 +174,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={params.id === 1 ? '/conference-article.pdf' : "/axborot_xati_new.pdf"} target={"_blank"}
+                                        <a href={params.id === 1 ? '/documents/information_latter.pdf' : "/axborot_xati_new.pdf"} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
@@ -185,7 +185,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                             <Button
                                                 className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                             >
-                                                <a href={'/conf_app.pdf'} target={"_blank"}
+                                                <a href={'/documents/application.pdf'} target={"_blank"}
                                                 >Yuklab olish</a>
                                             </Button>
                                         </div>
@@ -196,7 +196,7 @@ const ConferenceDetail = ({params}: { params: { id: number } }) => {
                                     <Button
                                         className="rounded-3xl px-[18px] py-[6px] bg-mainindigo hover:bg-mainindigo/85 w-fit"
                                     >
-                                        <a href={params.id === 1 ? '/namuna.docx' : "/namuna_2.docx"} target={"_blank"}
+                                        <a href={params.id === 1 ? '/documents/example.docx' : "/namuna_2.docx"} target={"_blank"}
                                         >Yuklab olish</a>
                                     </Button>
                                 </div>
